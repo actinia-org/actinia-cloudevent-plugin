@@ -14,8 +14,7 @@ jobs:
     secrets:
       PYPI_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
 
-# uncomment for new plugins (not needed for example plugin)
-  # publish-python-pypi:
-  #   uses: mundialis/github-workflows/.github/workflows/python-publish.yml@main
-  #   secrets:
-  #     PYPI_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+  publish-python-pypi:
+    uses: mundialis/github-workflows/.github/workflows/python-publish.yml@main
+    secrets:
+      PYPI_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
