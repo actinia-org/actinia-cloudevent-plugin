@@ -27,8 +27,7 @@ keywords = [
     "example",
 ]
 dependencies = [
-    "colorlog>=4.2.1",
-    "xmltodict",
+    "cloudevents",
 ]
 
 [project.optional-dependencies]

@@ -15,7 +15,7 @@ ENV DEFAULT_CONFIG_PATH=/etc/default/actinia-cloudevent-plugin-test
 # DL3018: Pin versions in apk add
 # hadolint ignore=DL3018
 RUN apk add --no-cache valkey && \
-    pip3 install --no-cache-dir iniconfig==2.0.0 colorlog==6.8.2 pwgen==0.8.2.post0 pytest==8.3.5 pytest-cov==6.0.0
+    pip3 install --no-cache-dir pwgen==0.8.2.post0 pytest==8.3.5 pytest-cov==6.0.0
 
 # COPY docker/actinia-cloudevent-plugin-test/start.sh /src/start.sh
 
