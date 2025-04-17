@@ -1,6 +1,6 @@
 # actinia-cloudevent-plugin
 
-This is an example plugin for [actinia-core](https://github.com/mundialis/actinia_core) which adds a "Hello World" endpoint to actinia-core.
+This is an plugin for [actinia-core](https://github.com/mundialis/actinia_core) which adds cloudevent endpoints to actinia-core.
 
 You can run actinia-cloudevent-plugin as an actinia-core plugin.
 
@@ -76,25 +76,6 @@ make integrationtest
 
 # run only tests which are marked for development with the decorator '@pytest.mark.dev'
 make devtest
-```
-
-## Starting steps for own plugin
-If you want to have your own plugin you can use this repo to create it by
-executing the `scripts/create_own_plugin.sh`.
-
-If you want the repo in git then you first have to create an empty git repository
-and then run the script. Then follow the last instructions from the script
-to upload the initial code to your git repository.
-
-```bash
-bash create_own_plugin.sh actinia-ex2-plugin git
-```
-
-If you only want your own plugin in a folder and not in git you can execute the
-script like this:
-
-```bash
-bash create_own_plugin.sh actinia-ex2-plugin
 ```
 
 ## Hint for the development of actinia plugins
