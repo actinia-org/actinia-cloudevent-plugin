@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Copyright (c) 2018-2024 mundialis GmbH & Co. KG.
+"""Copyright (c) 2018-2025 mundialis GmbH & Co. KG.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,13 +19,33 @@ Response models
 
 __license__ = "GPLv3"
 __author__ = "Anika Weinmann"
-__copyright__ = "Copyright 2022 mundialis GmbH & Co. KG"
+__copyright__ = "Copyright 2018-2025 mundialis GmbH & Co. KG"
 __maintainer__ = "mundialis GmbH & Co. KG"
 
 
 from typing import ClassVar
 
 from flask_restful_swagger_2 import Schema
+
+
+# NOTE: only used for helloworld testing endpoints
+class SimpleResponseModel(Schema):
+    """Simple response schema to inform about status."""
+
+    type = "object"
+    properties = {
+        "status": {
+            "type": "string",
+            "description": "The status of the resource, values: accepted, "
+            "running, finished, terminated, error",
+        },
+        "message": {
+            "type": "string",
+            "description": "A simple message to describes the status of the "
+            "resource",
+        },
+    }
+    required = ["status", "message"]
 
 
 class SimpleStatusCodeResponseModel(Schema):

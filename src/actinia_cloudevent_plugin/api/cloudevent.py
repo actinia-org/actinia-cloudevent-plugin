@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Copyright (c) 2018-2024 mundialis GmbH & Co. KG.
+"""Copyright (c) 2025 mundialis GmbH & Co. KG.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@ Hello World class
 """
 
 __license__ = "GPLv3"
-__author__ = "Anika Weinmann"
-__copyright__ = "Copyright 2022 mundialis GmbH & Co. KG"
+__author__ = "Lina Krisztian"
+__copyright__ = "Copyright 2025 mundialis GmbH & Co. KG"
 __maintainer__ = "mundialis GmbH & Co. KG"
 
 
@@ -39,19 +39,16 @@ class Cloudevent(Resource):
 
     def __init__(self) -> None:
         """Cloudevent class initialisation."""
-        # self.msg = "Hello world!"
-
-    # @swagger.doc(helloworld.describe_hello_world_get_docs)
-    # def get(self) -> SimpleStatusCodeResponseModel:
-    #     """Get 'Hello world!' as answer string."""
-    #     return SimpleStatusCodeResponseModel(status=200, message=self.msg)
+        self.msg = "Received event <EVENT1> and returned event <EVENT2> with queue <QUEUE>."
 
     @swagger.doc(cloudevent.describe_cloudevent_post_docs)
     def post(self) -> SimpleStatusCodeResponseModel:
-        """Cloudevent post method with name from postbody."""
-        event = receive_cloud_event()
-        queue_name = cloud_event_to_process_chain(event)
+        """Cloudevent post method with cloudevent from postbody."""
+        # Transform postbody to cloudevent
+        event_received = receive_cloud_event()
+        # Received process chain to queue name
+        queue_name = cloud_event_to_process_chain(event_received)
         # TODO: binary or structured cloud event?
-        send_binary_cloud_event(queue_name)
+        event_returned = send_binary_cloud_event(event_received, queue_name, event_received["cloudeventreceiver"])
+        return SimpleStatusCodeResponseModel(status=204, message=self.msg.replace("<EVENT1>",event_received["id"]).replace("<EVENT2>", event_returned["id"]).replace("<QUEUE>" ,queue_name))
 
-        return SimpleStatusCodeResponseModel(status=200)

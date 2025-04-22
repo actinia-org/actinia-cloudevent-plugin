@@ -25,10 +25,7 @@ __maintainer__ = "mundialis GmbH & Co. KG"
 
 from typing import ClassVar
 
-from actinia_core.models.response_models import SimpleResponseModel
-from actinia_core.rest.base.deprecated_locations import (
-    location_deprecated_decorator,
-)
+from actinia_cloudevent_plugin.model.response_models import SimpleResponseModel, SimpleStatusCodeResponseModel
 from flask import jsonify, make_response, request
 from flask.wrappers import Response
 from flask_restful_swagger_2 import Resource, swagger
@@ -40,19 +37,16 @@ from actinia_cloudevent_plugin.core.example import transform_input
 class ProjectHelloWorld(Resource):
     """Returns 'Hello world with project/location!'."""
 
-    decorators: ClassVar[list] = []
 
-    # Add decorators for deprecated GRASS GIS locations
-    decorators.append(location_deprecated_decorator)
 
     def __init__(self) -> None:
         """Project hello world class initialisation."""
         self.msg = "Project: Hello world!"
 
     @swagger.doc(project_helloworld.describe_project_hello_world_get_docs)
-    def get(self, project_name: str) -> Response:
+    def get(self) -> Response:
         """Get 'Hello world!' as answer string."""
-        msg = f"{self.msg} {project_name}"
+        msg = f"{self.msg}"
         return make_response(
             jsonify(
                 SimpleResponseModel(
@@ -64,13 +58,13 @@ class ProjectHelloWorld(Resource):
         )
 
     @swagger.doc(project_helloworld.describe_project_hello_world_post_docs)
-    def post(self, project_name: str) -> Response:
+    def post(self):
         """Hello World post method with name from postbody."""
         req_data = request.get_json(force=True)
         if isinstance(req_data, dict) is False or "name" not in req_data:
             return make_response("Missing name in JSON content", 400)
         name = req_data["name"]
-        msg = f"{self.msg} {transform_input(name)} {project_name}"
+        msg = f"{self.msg} {transform_input(name)}"
 
         return make_response(
             jsonify(

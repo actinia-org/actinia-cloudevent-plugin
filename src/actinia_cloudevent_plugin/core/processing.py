@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Copyright (c) 2018-2024 mundialis GmbH & Co. KG.
+"""Copyright (c) 2025 mundialis GmbH & Co. KG.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@ Example core functionality
 """
 
 __license__ = "GPLv3"
-__author__ = "Anika Weinmann"
-__copyright__ = "Copyright 2022 mundialis GmbH & Co. KG"
+__author__ = "Lina Krisztian"
+__copyright__ = "Copyright 2025 mundialis GmbH & Co. KG"
 __maintainer__ = "mundialis GmbH & Co. KG"
 
 
@@ -32,62 +32,67 @@ from cloudevents.http import CloudEvent
 
 
 def receive_cloud_event():
-    """Return cloudevent fields core function.
-
-    Args:
-        inp (str): Input string with cloudevent json
-
-    Returns:
-        (str) cloudevent fields
-
+    """Return cloudevent from postpody
     """
     # Parses CloudEvent `data` and `headers` into a CloudEvent`.
     event = from_http(request.headers, request.get_data())
+
+    # TODO
+    # Process the event (example)
+    event_type = event["type"]
+    if event_type == "com.example.object.created":
+        print("Object created event received!")
 
     return event
 
 
 def cloud_event_to_process_chain(event):
-    # you can access cloudevent fields as seen below
-    # print(
-    #     f"Found {event['id']} from {event['source']} with type "
-    #     f"{event['type']} and specversion {event['specversion']}"
-    # )
+    """Return queue name for process chain of event
+    """
     
-    # TODO
+    pc = event.get_data()["list"][0]
+    # !! TODO !!: pc to queue
+    # NOTE: as core plugin AND/OR as standalone app -> consider for queue name creation
     queue_name="test_queue_name"
-    pc = event["data"]["list"]
 
     return queue_name
-
-def send_binary_cloud_event(queue_name, url):
-    # This data defines a binary cloudevent
-    # TODO
+def send_binary_cloud_event(event, queue_name, url):
+    """Return posted binary event with queue name
+    """
+    # TODO: define/configure source + type
     attributes = {
-        "type": "com.example.sampletype1",
-        "source": "https://example.com/event-producer",
+        "specversion": event["specversion"],
+        "source" : "/actinia-cloudevent-plugin",
+        "type": "TODO",
+        "subject": event["subject"],
+        "datacontenttype": "application/json",
     }
     data = {"queue": queue_name }
 
     event = CloudEvent(attributes, data)
     headers, body = to_binary(event)
-
-    # send and print event
+    # send event
     requests.post(url, headers=headers, data=body)
-    print(f"Sent {event['id']} from {event['source']} with {event.data}")
+
+    return event
 
 
-# def send_structured_cloud_event(url):
-#     # This data defines a binary cloudevent
-#     attributes = {
-#         "type": "com.example.sampletype2",
-#         "source": "https://example.com/event-producer",
-#     }
-#     data = {"message": "Hello World!"}
+def send_structured_cloud_event(event, queue_name, url):
+    """Return posted structured event with queue name
+    """
+    # TODO: define/configure source + type
+    attributes = {
+        "specversion": event["specversion"],
+        "source" : "/actinia-cloudevent-plugin",
+        "type": "TODO",
+        "subject": event["subject"],
+        "datacontenttype": "application/json",
+    }
+    data = {"queue": queue_name }
 
-#     event = CloudEvent(attributes, data)
-#     headers, body = to_structured(event)
+    event = CloudEvent(attributes, data)
+    headers, body = to_structured(event)
+    # send event
+    requests.post(url, headers=headers, data=body)
 
-#     # send and print event
-#     requests.post(url, headers=headers, data=body)
-#     print(f"Sent {event['id']} from {event['source']} with {event.data}")
+    return event

@@ -32,27 +32,6 @@ import werkzeug
 from actinia_cloudevent_plugin.resources.logging import log
 from actinia_cloudevent_plugin.api.cloudevent import Cloudevent
 
-
-# def create_project_endpoints(
-#     apidoc: Api,
-#     projects_url_part: str = "projects",
-# ) -> None:
-#     """Add resources with "project" inside the endpoint url to the api.
-
-#     Args:
-#         apidoc (Api): Flask api
-#         projects_url_part (str): The name of the projects inside the endpoint
-#                                  URL; to add deprecated location endpoints set
-#                                  it to "locations"
-
-#     """
-#     apidoc.add_resource(
-#         ProjectHelloWorld,
-#         f"/helloworld/{projects_url_part}/<string:project_name>",
-#         endpoint=get_endpoint_class_name(ProjectHelloWorld, projects_url_part),
-#     )
-
-
 # endpoints loaded if run as actinia-core plugin as well as standalone app
 def create_endpoints(flask_api: Api) -> None:
     """Create plugin endpoints."""
@@ -67,7 +46,7 @@ def create_endpoints(flask_api: Api) -> None:
                 return current_app.send_static_file('index.html')
             except werkzeug.exceptions.NotFound:
                 log.debug('No index.html found. Serving backup.')
-                # when actinia-metadata-plugin is installed in single mode, the
+                # when actinia-cloudevent-plugin is installed in single mode, the
                 # swagger endpoint would be "latest/api/swagger.json". As api
                 # docs exist in single mode, use this fallback for plugin mode.
                 return ("""<h1 style='color:red'>actinia-metadata-plugin</h1>
@@ -78,15 +57,15 @@ def create_endpoints(flask_api: Api) -> None:
             # WARNING: all content from folder "static" will be accessible!
             return send_from_directory(app.static_folder, filename)
 
-    # apidoc.add_resource(Cloudevent, "/cloudevent")
+    apidoc.add_resource(Cloudevent, "/")
     
-    from actinia_cloudevent_plugin.api.project_helloworld import ProjectHelloWorld
-    apidoc.add_resource(
-        ProjectHelloWorld,
-        f"/helloworld/projects/",
-    )
-
-    # # add deprecated location endpoints
-    # create_project_endpoints(apidoc, projects_url_part="locations")
-    # # add project endpoints
-    # create_project_endpoints(apidoc, projects_url_part="projects")
+    # from actinia_cloudevent_plugin.api.project_helloworld import ProjectHelloWorld
+    # apidoc.add_resource(
+    #     ProjectHelloWorld,
+    #     "/helloworld/projects/",
+    # )
+    # from actinia_cloudevent_plugin.api.helloworld import HelloWorld
+    # apidoc.add_resource(
+    #     HelloWorld,
+    #     "/helloworld",
+    # )

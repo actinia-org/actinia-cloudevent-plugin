@@ -27,92 +27,19 @@ from actinia_cloudevent_plugin.model.response_models import (
     SimpleStatusCodeResponseModel,
 )
 
-
-# class ProcessesJobResponseModel(Schema):
-#     """Response schema for creating a job"""
-#     type = 'object'
-#     properties = {
-#         'id': {
-#             'type': 'integer',
-#             'description': 'The job ID'
-#         },
-#         'time_created': {
-#             'type': 'string',
-#             'description': 'Timestamp when job was created'
-#         },
-#         'time_started': {
-#             'type': 'string',
-#             'description': 'Timestamp when job was created'
-#         },
-#         'time_estimated': {
-#             'type': 'string',
-#             'description': 'Timestamp when job was created'
-#         },
-#         'time_ended': {
-#             'type': 'string',
-#             'description': 'Timestamp when job was created'
-#         },
-#         'status': {
-#             'type': 'string',
-#             'description': 'Status of the Job',
-#             'enum': [
-#                 "PENDING",
-#                 "RUNNING",
-#                 "SUCCESS",
-#                 "ERROR",
-#                 "TERMINATED"
-#             ]
-#         },
-#         'resource_response': {
-#             'type': 'object',
-#             'description': 'The Response at creation time'
-#         },
-#         'resource_id': {
-#             'type': 'string',
-#             'description': 'The resource ID for the job'
-#         },
-#         'creation_uuid': {
-#             'type': 'string',
-#             'description': 'A unique id for the job at creation time before '
-#                            'id is known. (More unique than creation '
-#                            'timestamp)'
-#         }
-#     }
-#     example = jobs_get_docs_response_example
-
-# describe_ld_get_docs = {
-#     # "summary" is taken from the description of the get method
-#     "tags": ["example"],
-#     "description": "Hello World example",
-#     "responses": {
-#         "200": {
-#             "description": "This response returns the string 'Hello World!'",
-#             "schema": SimpleStatusCodeResponseModel,
-#         },
-#     },
-# }
-
 describe_cloudevent_post_docs = {
     # "summary" is taken from the description of the get method
     "tags": ["cloudevent"],
-    "description": "Receives dloudevent, transforms to PC and returns cloudevent.",
+    "description": "Receives cloudevent, generates queue name and returns cloudevent.",
     "responses": {
         "200": {
-            "description": "TODO",
+            "description": ("This response returns received, and returned events, "
+                            "generated queue name and the status"),
             "schema": SimpleStatusCodeResponseModel,
         },
-        # "400": {
-        #     "description": "This response returns a detail error message",
-        #     "schema": {
-        #         "type": "object",
-        #         "properties": {
-        #             "message": {
-        #                 "type": "string",
-        #                 "description": "detailed message",
-        #                 "example": "Missing name in JSON content",
-        #             },
-        #         },
-        #     },
-        # },
+        "400": {
+            "description": "This response returns an error message",
+            "schema": SimpleStatusCodeResponseModel,
+        },
     },
 }

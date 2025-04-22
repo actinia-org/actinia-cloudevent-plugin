@@ -33,7 +33,7 @@ from actinia_cloudevent_plugin.endpoints import create_endpoints
 # from actinia_gdi.core.jobtable import initJobDB
 # -> difference to kvdb?
 from actinia_cloudevent_plugin.resources.logging import log
-from actinia_cloudevent_plugin.resources.config import APP
+# from actinia_cloudevent_plugin.resources.config import APP
 
 
 app = Flask(__name__)
@@ -58,20 +58,13 @@ apidoc = Api(
                    """
 )
 
-@app.before_request
-def handle_preflight():
-    if request.method == "OPTIONS":
-        res = Response()
-        res.headers['X-Content-Type-Options'] = '*'
-        return res
-
 create_endpoints(apidoc)
 # TODO
 # initJobDB()
 
 
 if __name__ == '__main__':
-    # call this for development only with `python -m actinia_cloudevent_plugin.main`
+    # call this for development only with `python3 -m actinia_cloudevent_plugin.main`
     log.debug('starting app in development mode...')
     app.run(debug=True, use_reloader=False)
     # for production environent use application in wsgy.py

@@ -10,10 +10,8 @@ COPY docker/actinia.cfg /etc/default/actinia
 COPY src /src/actinia-cloudevent-plugin/src/
 COPY setup.cfg /src/actinia-cloudevent-plugin/
 COPY setup.py /src/actinia-cloudevent-plugin/
-COPY requirements.txt /src/actinia-cloudevent-plugin/
 
-RUN pip3 install --no-cache-dir -r /src/actinia-cloudevent-plugin/requirements.txt && \
-    pip3 uninstall actinia-cloudevent-plugin.wsgi -y
+RUN pip3 uninstall actinia-cloudevent-plugin.wsgi -y
 # SETUPTOOLS_SCM_PRETEND_VERSION is only needed if in the plugin folder is no
 # .git folder
 ENV SETUPTOOLS_SCM_PRETEND_VERSION=0.0
