@@ -31,6 +31,8 @@ from actinia_cloudevent_plugin.core.processing import receive_cloud_event, cloud
 from actinia_cloudevent_plugin.model.response_models import (
     SimpleStatusCodeResponseModel,
 )
+from actinia_cloudevent_plugin.resources.config import EVENTRECEIVER
+
 
 
 class Cloudevent(Resource):
@@ -46,9 +48,18 @@ class Cloudevent(Resource):
         """Cloudevent post method with cloudevent from postbody."""
         # Transform postbody to cloudevent
         event_received = receive_cloud_event()
-        # Received process chain to queue name
-        queue_name = cloud_event_to_process_chain(event_received)
+        # With received process chain start actinia process
+        actinia_job = cloud_event_to_process_chain(event_received)
         # TODO: binary or structured cloud event?
-        event_returned = send_binary_cloud_event(event_received, queue_name, event_received["cloudeventreceiver"])
+        # From https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#message
+        # A "structured-mode message" is one where the entire event (attributes and data) are encoded in the message body, according to a specific event format.
+        # A "binary-mode message" is one where the event data is stored in the message body, and event attributes are stored as part of message metadata.
+        # Often, binary mode is used when the producer of the CloudEvent wishes to add the CloudEvent's metadata to an existing event without impacting the message's body.
+        # In most cases a CloudEvent encoded as a binary-mode message will not break an existing receiver's processing of the event because the message's metadata typically allows for extension attributes.
+        # In other words, a binary formatted CloudEvent would work for both a CloudEvents enabled receiver as well as one that is unaware of CloudEvents.
+        import pdb; pdb.set_trace()
+        url=EVENTRECEIVER.url
+        event_returned = send_binary_cloud_event(event_received, actinia_job, url)
+        
         return SimpleStatusCodeResponseModel(status=204, message=self.msg.replace("<EVENT1>",event_received["id"]).replace("<EVENT2>", event_returned["id"]).replace("<QUEUE>" ,queue_name))
 

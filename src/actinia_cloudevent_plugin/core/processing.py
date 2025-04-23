@@ -38,7 +38,7 @@ def receive_cloud_event():
     event = from_http(request.headers, request.get_data())
 
     # TODO
-    # Process the event (example)
+    # eventually Filter the event (example)
     event_type = event["type"]
     if event_type == "com.example.object.created":
         print("Object created event received!")
@@ -51,23 +51,40 @@ def cloud_event_to_process_chain(event):
     """
     
     pc = event.get_data()["list"][0]
-    # !! TODO !!: pc to queue
-    # NOTE: as core plugin AND/OR as standalone app -> consider for queue name creation
-    queue_name="test_queue_name"
+    # !! TODO !!: pc to job
+    # NOTE: as standalone app -> consider for queue name creation
+    # HTTP POST pc to actinia-module plugin processing endpoint
+    # # # include an identifier for grouping cloudevents of same actinia process (?)
+    # # # (e.g. new metadata field "queue_name", or within data, or use existign id)
+    # -> actinia core returns resource-url, including resource_id  (and queue name)
+    #   (queuename = xx_<resource_id>; wenn enstprechedn in actinia konfiguiert -> jeder job eigene queue)
+    # via knative jobsink: start actinia worker (with queue name) 
+    # (https://knative.dev/docs/eventing/sinks/job-sink/#usage)
+    # e.g. HTTP POST with queue name
+    # kubectl run curl --image=curlimages/curl --rm=true --restart=Never -ti -- -X POST -v \
+    #    -H "content-type: application/json"  \
+    #    -H "ce-specversion: 1.0" \
+    #    -H "ce-source: my/curl/command" \
+    #    -H "ce-type: my.demo.event" \
+    #    -H "ce-id: 123" \
+    #    -d '{"details":"queuename"}' \
+    #    http://job-sink.knative-eventing.svc.cluster.local/default/job-sink-logger
+    actinia_job="<queue_name>_<resource_id>" # queue name and resource id
 
-    return queue_name
-def send_binary_cloud_event(event, queue_name, url):
-    """Return posted binary event with queue name
+    return actinia_job
+
+
+def send_binary_cloud_event(event, actinia_job, url):
+    """Return posted binary event with actinia_job
     """
-    # TODO: define/configure source + type
     attributes = {
         "specversion": event["specversion"],
         "source" : "/actinia-cloudevent-plugin",
-        "type": "TODO",
+        "type": "com.mundialis.actinia.process.started",
         "subject": event["subject"],
         "datacontenttype": "application/json",
     }
-    data = {"queue": queue_name }
+    data = {"actinia_job": actinia_job }
 
     event = CloudEvent(attributes, data)
     headers, body = to_binary(event)
@@ -77,18 +94,17 @@ def send_binary_cloud_event(event, queue_name, url):
     return event
 
 
-def send_structured_cloud_event(event, queue_name, url):
-    """Return posted structured event with queue name
+def send_structured_cloud_event(event, actinia_job, url):
+    """Return posted structured event with actinia_job
     """
-    # TODO: define/configure source + type
     attributes = {
         "specversion": event["specversion"],
         "source" : "/actinia-cloudevent-plugin",
-        "type": "TODO",
+        "type": "com.mundialis.actinia.process.started",
         "subject": event["subject"],
         "datacontenttype": "application/json",
     }
-    data = {"queue": queue_name }
+    data = {"actinia_job": actinia_job }
 
     event = CloudEvent(attributes, data)
     headers, body = to_structured(event)

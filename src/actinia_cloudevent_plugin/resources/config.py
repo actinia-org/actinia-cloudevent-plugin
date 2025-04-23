@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Copyright (c) 2018-2021 mundialis GmbH & Co. KG
+Copyright (c) 2018-2025 mundialis GmbH & Co. KG
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ Configuration file
 """
 
 __author__ = "Carmen Tawalika, Lina Krisztian"
-__copyright__ = "2025 mundialis GmbH & Co. KG"
+__copyright__ = "2018-2025 mundialis GmbH & Co. KG"
 __license__ = "Apache-2.0"
 
 
@@ -54,6 +54,13 @@ class JOBTABLE:
     schema = 'actinia'
     table = 'tab_jobs'
     id_field = 'idpk_jobs'
+
+
+class EVENTRECEIVER:
+    """Default config for cloudevent receiver"""
+    # TODO: use values from config-file not default values!
+    # test e.g. with url = 'http://localhost:8080'
+    url = 'http://localhost:3000/'
 
 
 class LOGCONFIG:
@@ -168,6 +175,11 @@ class Configfile:
                 GISTABLE.database = config.get("GISTABLE", "database")
             if config.has_option("GISTABLE", "user"):
                 GISTABLE.user = config.get("GISTABLE", "user")
+
+        # EVENTRECEIVER
+        if config.has_section("EVENTRECEIVER"):
+            if config.has_option("EVENTRECEIVER", "url"):
+                EVENTRECEIVER.url = config.get("EVENTRECEIVER", "url")
 
 
 init = Configfile()
