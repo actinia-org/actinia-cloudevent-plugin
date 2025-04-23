@@ -11,6 +11,22 @@ If used as actinia-core plugin, the main.py is not executed.
 
 ## Installation and Setup
 
+### As standalone app
+Use docker-compose for installation:
+```bash
+docker compose -f docker/docker-compose-standalone.yml build
+docker compose -f docker/docker-compose-standalone.yml up -d
+```
+#### DEV setup
+```bash
+docker compose -f docker/docker-compose-standalone.yml build
+docker compose -f docker/docker-compose-standalone.yml run --rm --service-ports --entrypoint sh actinia-cloudevent
+# install the plugin
+pip3 install .
+# start flask app with actinia-cloudevent-plugin
+python3 -m actinia_cloudevent_plugin.main
+```
+
 ### As actinia-core plugin
 
 Use docker-compose for installation:
@@ -19,15 +35,12 @@ docker compose -f docker/docker-compose-plugin.yml build
 docker compose -f docker/docker-compose-plugin.yml up -d
 ```
 #### DEV setup
-For a DEV setup you can use the docker/docker-compose-plugin.yml:
 ```bash
 docker compose -f docker/docker-compose-plugin.yml build
 docker compose -f docker/docker-compose-plugin.yml run --rm --service-ports --entrypoint sh actinia
-# OR with mounted source code
-docker compose -f docker/docker-compose-plugin.yml run --volume `pwd`:/src/actinia_cloudevent-plugin/  --rm --service-ports --entrypoint sh actinia
 
 # install the plugin
-(cd /src/actinia-cloudevent-plugin && python3 setup.py install)
+(cd /src/actinia-cloudevent-plugin && pip3 install .)
 # start actinia-core with your plugin
 sh /src/start.sh
 # gunicorn -b 0.0.0.0:8088 -w 1 --access-logfile=- -k gthread actinia_core.main:flask_app
@@ -41,10 +54,6 @@ docker compose -f docker/docker-compose-plugin.yml down
 docker network prune
 docker compose -f docker/docker-compose-plugin.yml up -d
 ```
-### As standalone app
-
-TODO
-
 
 ## Requesting endpoint
 

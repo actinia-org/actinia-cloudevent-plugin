@@ -1,9 +1,15 @@
-version: "3"
 services:
 
   actinia-cloudevent:
-    image: actinia-cloudevent
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile-standalone
+    volumes:
+      - ..:/src/actinia-cloudevent-plugin/.
+      - ./actinia-cloudevent-data:/opt/app-root/src/config/mount
+    cap_add:
+      - SYS_PTRACE
     ports:
       - "5000:5000"
-    volumes:
-      - ./actinia-cloudevent-data:/opt/app-root/src/config/mount
+    network_mode: "host"
+

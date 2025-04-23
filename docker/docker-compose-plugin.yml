@@ -4,7 +4,7 @@ services:
   actinia:
     build:
       context: ..
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile-plugin
     volumes:
       - ..:/src/actinia-cloudevent-plugin/.
     ports:
