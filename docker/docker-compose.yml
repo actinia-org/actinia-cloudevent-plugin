@@ -1,0 +1,12 @@
+services:
+
+  actinia-cloudevent:
+    build:
+      context: ..
+      dockerfile: docker/actinia-cloudevent-plugin-alpine/Dockerfile
+    cap_add:
+      - SYS_PTRACE
+    ports:
+      - "5000:5000"
+    network_mode: "host"
+

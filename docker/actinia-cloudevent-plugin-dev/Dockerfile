@@ -1,0 +1,17 @@
+FROM alpine:3.21
+
+# python3 + pip3
+RUN apk update; \
+    apk add --no-cache python3 python3-dev
+ENV PATH="/opt/venv/bin:$PATH"
+RUN /usr/bin/python -m venv --system-site-packages --without-pip /opt/venv
+RUN python -m ensurepip && pip3 install --upgrade pip pep517 wheel
+
+COPY . /src/actinia-cloudevent-plugin/
+
+# SETUPTOOLS_SCM_PRETEND_VERSION is only needed if in the plugin folder is no
+# .git folder
+ENV SETUPTOOLS_SCM_PRETEND_VERSION=0.0
+
+WORKDIR /src/actinia-cloudevent-plugin
+RUN pip3 install --no-cache-dir -e .

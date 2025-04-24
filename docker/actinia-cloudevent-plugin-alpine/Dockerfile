@@ -7,12 +7,10 @@ ENV PATH="/opt/venv/bin:$PATH"
 RUN /usr/bin/python -m venv --system-site-packages --without-pip /opt/venv
 RUN python -m ensurepip && pip3 install --upgrade pip pep517 wheel
 
-# RUN pip3 install --no-cache-dir pwgen==0.8.2.post0
+# gunicorn
+RUN pip3 install gunicorn
 
-# COPY docker/actinia.cfg /etc/default/actinia
 COPY . /src/actinia-cloudevent-plugin/
-
-COPY docker/gunicorn.cfg /gunicorn.cfg
 
 # SETUPTOOLS_SCM_PRETEND_VERSION is only needed if in the plugin folder is no
 # .git folder
@@ -20,5 +18,3 @@ ENV SETUPTOOLS_SCM_PRETEND_VERSION=0.0
 
 WORKDIR /src/actinia-cloudevent-plugin
 RUN pip3 install --no-cache-dir -e .
-
-# RUN python3 -m actinia_cloudevent_plugin.main
