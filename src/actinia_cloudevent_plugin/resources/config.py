@@ -58,8 +58,6 @@ class JOBTABLE:
 
 class EVENTRECEIVER:
     """Default config for cloudevent receiver"""
-    # TODO: use values from config-file not default values!
-    # test e.g. with url = 'http://localhost:8080'
     url = 'http://localhost:3000/'
 
 
@@ -102,7 +100,6 @@ class Configfile:
 
         config = configparser.ConfigParser()
         config.read(CONFIG_FILES)
-
         if len(config) <= 1:
             print("Could not find any config file, using default values.")
             return

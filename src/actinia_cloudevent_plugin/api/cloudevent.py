@@ -23,7 +23,7 @@ __copyright__ = "Copyright 2025 mundialis GmbH & Co. KG"
 __maintainer__ = "mundialis GmbH & Co. KG"
 
 
-from flask import make_response, request
+from flask import make_response, jsonify, request
 from flask_restful_swagger_2 import Resource, swagger
 
 from actinia_cloudevent_plugin.apidocs import cloudevent
@@ -41,7 +41,14 @@ class Cloudevent(Resource):
 
     def __init__(self) -> None:
         """Cloudevent class initialisation."""
-        self.msg = "Received event <EVENT1> and returned event <EVENT2> with queue <QUEUE>."
+        self.msg = "Received event <EVENT1> and returned event <EVENT2> with actinia-job <ACTINIA_JOB>."
+
+    def get(self):
+        res = jsonify(SimpleStatusCodeResponseModel(
+            status=405,
+            message="Method Not Allowed"
+        ))
+        return make_response(res, 405)
 
     @swagger.doc(cloudevent.describe_cloudevent_post_docs)
     def post(self) -> SimpleStatusCodeResponseModel:
@@ -57,9 +64,8 @@ class Cloudevent(Resource):
         # Often, binary mode is used when the producer of the CloudEvent wishes to add the CloudEvent's metadata to an existing event without impacting the message's body.
         # In most cases a CloudEvent encoded as a binary-mode message will not break an existing receiver's processing of the event because the message's metadata typically allows for extension attributes.
         # In other words, a binary formatted CloudEvent would work for both a CloudEvents enabled receiver as well as one that is unaware of CloudEvents.
-        import pdb; pdb.set_trace()
         url=EVENTRECEIVER.url
         event_returned = send_binary_cloud_event(event_received, actinia_job, url)
         
-        return SimpleStatusCodeResponseModel(status=204, message=self.msg.replace("<EVENT1>",event_received["id"]).replace("<EVENT2>", event_returned["id"]).replace("<QUEUE>" ,queue_name))
+        return SimpleStatusCodeResponseModel(status=204, message=self.msg.replace("<EVENT1>",event_received["id"]).replace("<EVENT2>", event_returned["id"]).replace("<ACTINIA_JOB>" ,actinia_job))
 

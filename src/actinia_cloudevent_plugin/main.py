@@ -37,6 +37,8 @@ from actinia_cloudevent_plugin.resources.logging import log
 
 
 app = Flask(__name__)
+# allows endpoints with and without trailing slashes
+app.url_map.strict_slashes = False
 CORS(app)
 
 
@@ -47,8 +49,8 @@ URL_PREFIX = f"/api/{API_VERSION}"
 apidoc = Api(
     app,
     title="actinia-cloudevent-plugin",
-    # api_version=APP.version,
-    # api_spec_url='/latest/api/swagger',
+    prefix=URL_PREFIX,
+    api_version=API_VERSION,
     api_spec_url=f'{URL_PREFIX}/swagger',
     schemes=['https', 'http'],
     consumes=['application/json'],
@@ -67,4 +69,4 @@ if __name__ == '__main__':
     # call this for development only with `python3 -m actinia_cloudevent_plugin.main`
     log.debug('starting app in development mode...')
     app.run(debug=True, use_reloader=False)
-    # for production environent use application in wsgy.py
+    # for production environent use application in wsgi.py
