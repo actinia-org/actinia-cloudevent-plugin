@@ -48,3 +48,6 @@ docker/valkey_data/dump.rdb
 .pylintrc_allowed_to_fail
 ruff-github-workflows.toml
 ruff-merged.toml
+
+# Development env
+config/*.cfg

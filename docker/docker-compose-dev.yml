@@ -3,7 +3,9 @@ services:
   actinia-cloudevent:
     build:
       context: ..
-      dockerfile: docker/actinia-cloudevent-plugin-alpine/Dockerfile
+      dockerfile: docker/actinia-cloudevent-plugin-dev/Dockerfile
+    volumes:
+      - ..:/src/actinia-cloudevent-plugin/.
     cap_add:
       - SYS_PTRACE
     ports:
