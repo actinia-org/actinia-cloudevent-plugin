@@ -60,7 +60,8 @@ create_endpoints(apidoc)
 
 
 if __name__ == "__main__":
-    # call this for development only with `python3 -m actinia_cloudevent_plugin.main`
+    # call this for development only with:
+    # `python3 -m actinia_cloudevent_plugin.main`
     log.debug("starting app in development mode...")
     app.run(debug=True, use_reloader=False)
     # for production environent use application in wsgi.py

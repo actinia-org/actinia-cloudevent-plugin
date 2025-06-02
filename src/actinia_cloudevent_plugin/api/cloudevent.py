@@ -46,7 +46,8 @@ class Cloudevent(Resource):
 
     def __init__(self) -> None:
         """Cloudevent class initialisation."""
-        self.msg = "Received event <EVENT1> and returned event <EVENT2> with actinia-job <ACTINIA_JOB>."
+        self.msg = ("Received event <EVENT1> and returned event <EVENT2>"
+                    " with actinia-job <ACTINIA_JOB>.")
 
     def get(self):
         res = jsonify(
@@ -66,11 +67,17 @@ class Cloudevent(Resource):
         actinia_job = cloud_event_to_process_chain(event_received)
         # TODO: binary or structured cloud event?
         # From https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#message
-        # A "structured-mode message" is one where the entire event (attributes and data) are encoded in the message body, according to a specific event format.
-        # A "binary-mode message" is one where the event data is stored in the message body, and event attributes are stored as part of message metadata.
-        # Often, binary mode is used when the producer of the CloudEvent wishes to add the CloudEvent's metadata to an existing event without impacting the message's body.
-        # In most cases a CloudEvent encoded as a binary-mode message will not break an existing receiver's processing of the event because the message's metadata typically allows for extension attributes.
-        # In other words, a binary formatted CloudEvent would work for both a CloudEvents enabled receiver as well as one that is unaware of CloudEvents.
+        # A "structured-mode message" is one where the entire event (attributes and data)
+        # are encoded in the message body, according to a specific event format.
+        # A "binary-mode message" is one where the event data is stored in the message body,
+        # and event attributes are stored as part of message metadata.
+        # Often, binary mode is used when the producer of the CloudEvent wishes to add the
+        # CloudEvent's metadata to an existing event without impacting the message's body.
+        # In most cases a CloudEvent encoded as a binary-mode message will not break an
+        # existing receiver's processing of the event because the message's metadata
+        # typically allows for extension attributes.
+        # In other words, a binary formatted CloudEvent would work for both
+        # a CloudEvents enabled receiver as well as one that is unaware of CloudEvents.
         url = EVENTRECEIVER.url
         event_returned = send_binary_cloud_event(
             event_received, actinia_job, url

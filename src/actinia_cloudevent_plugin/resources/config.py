@@ -25,7 +25,6 @@ __license__ = "Apache-2.0"
 
 
 import configparser
-import glob
 from pathlib import Path
 
 # config can be overwritten by mounting *.ini files into folders inside

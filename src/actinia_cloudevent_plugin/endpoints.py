@@ -48,9 +48,10 @@ def create_endpoints(flask_api: Api) -> None:
                 return current_app.send_static_file("index.html")
             except werkzeug.exceptions.NotFound:
                 log.debug("No index.html found. Serving backup.")
-                # when actinia-cloudevent-plugin is installed in single mode, the
-                # swagger endpoint would be "latest/api/swagger.json". As api
-                # docs exist in single mode, use this fallback for plugin mode.
+                # when actinia-cloudevent-plugin is installed in single mode,
+                # the swagger endpoint would be "latest/api/swagger.json".
+                # As api docs exist in single mode,
+                # use this fallback for plugin mode.
                 return """<h1 style='color:red'>actinia-metadata-plugin</h1>
                     <a href="api/v1/swagger.json">API docs</a>"""
 
