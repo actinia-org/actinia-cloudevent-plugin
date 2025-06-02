@@ -66,7 +66,9 @@ class Configfile:
         print("Loading config files: " + str(CONFIG_FILES) + " ...")
 
         with open(  # noqa: PTH123
-            GENERATED_CONFIG, "w", encoding="utf-8",
+            GENERATED_CONFIG,
+            "w",
+            encoding="utf-8",
         ) as configfile:
             config.write(configfile)
         print("Configuration written to " + GENERATED_CONFIG)
