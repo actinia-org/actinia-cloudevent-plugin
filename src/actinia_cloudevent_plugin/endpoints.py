@@ -41,6 +41,7 @@ def create_endpoints(flask_api: Api) -> None:
 
     package = sys._getframe().f_back.f_globals["__package__"]
     if package != "actinia_core":
+
         @app.route("/")
         def index():
             try:

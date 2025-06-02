@@ -74,6 +74,7 @@ def setLogHandler(logger, type, format):
 
 class CustomJsonFormatter(jsonlogger.JsonFormatter):
     """Customized formatting of logs as json"""
+
     def add_fields(self, log_record, record, message_dict):
         super(CustomJsonFormatter, self).add_fields(
             log_record, record, message_dict

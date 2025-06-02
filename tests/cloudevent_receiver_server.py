@@ -9,6 +9,7 @@ from cloudevents.http import from_http
 
 app = Flask(__name__)
 
+
 @app.route("/", methods=["POST"])
 def home():
     """Server for cloudevent receival"""
