@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""
-Copyright (c) 2025 mundialis GmbH & Co. KG
+"""Copyright (c) 2025 mundialis GmbH & Co. KG.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -34,7 +32,6 @@ from pythonjsonlogger import jsonlogger
 
 from actinia_cloudevent_plugin.resources.config import LOGCONFIG
 
-
 # Notice: do not call logging.warning (will create new logger for ever)
 # logging.warning("called actinia_cloudevent_plugin logger after 1")
 
@@ -44,25 +41,25 @@ gunicornLog = logging.getLogger("gunicorn")
 
 
 def setLogFormat(veto=None):
-    """Set format of logs"""
+    """Set format of logs."""
     logformat = ""
     if LOGCONFIG.type == "json" and not veto:
         logformat = CustomJsonFormatter(
             "%(time) %(level) %(component)"
             "%(module) %(message) %(pathname)"
             "%(lineno) %(processName)"
-            "%(threadName)"
+            "%(threadName)",
         )
     else:
         logformat = ColoredFormatter(
             "%(log_color)s[%(asctime)s] %(levelname)-10s: %(name)s.%(module)-"
-            "10s -%(message)s [in %(pathname)s:%(lineno)d]%(reset)s"
+            "10s -%(message)s [in %(pathname)s:%(lineno)d]%(reset)s",
         )
     return logformat
 
 
-def setLogHandler(logger, type, format):
-    """Set handling of logs"""
+def setLogHandler(logger, type, format) -> None:
+    """Set handling of logs."""
     if type == "stdout":
         handler = logging.StreamHandler()
     elif type == "file":
@@ -73,11 +70,13 @@ def setLogHandler(logger, type, format):
 
 
 class CustomJsonFormatter(jsonlogger.JsonFormatter):
-    """Customized formatting of logs as json"""
+    """Customized formatting of logs as json."""
 
-    def add_fields(self, log_record, record, message_dict):
+    def add_fields(self, log_record, record, message_dict) -> None:
         super(CustomJsonFormatter, self).add_fields(
-            log_record, record, message_dict
+            log_record,
+            record,
+            message_dict,
         )
 
         # (Pdb) dir(record)
@@ -92,8 +91,8 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
         log_record["component"] = record.name
 
 
-def createLogger():
-    """create logger, set level and define format"""
+def createLogger() -> None:
+    """Create logger, set level and define format."""
     log.setLevel(getattr(logging, LOGCONFIG.level))
     fileformat = setLogFormat("veto")
     stdoutformat = setLogFormat()
@@ -101,8 +100,8 @@ def createLogger():
     setLogHandler(log, "stdout", stdoutformat)
 
 
-def createWerkzeugLogger():
-    """create werkzeug-logger, set level and define format"""
+def createWerkzeugLogger() -> None:
+    """Create werkzeug-logger, set level and define format."""
     werkzeugLog.setLevel(getattr(logging, LOGCONFIG.level))
     fileformat = setLogFormat("veto")
     stdoutformat = setLogFormat()
@@ -110,8 +109,8 @@ def createWerkzeugLogger():
     setLogHandler(werkzeugLog, "stdout", stdoutformat)
 
 
-def createGunicornLogger():
-    """create gunicorn-logger, set level and define format"""
+def createGunicornLogger() -> None:
+    """Create gunicorn-logger, set level and define format."""
     gunicornLog.setLevel(getattr(logging, LOGCONFIG.level))
     fileformat = setLogFormat("veto")
     stdoutformat = setLogFormat()

@@ -23,16 +23,14 @@ __copyright__ = "Copyright 2025 mundialis GmbH & Co. KG"
 __maintainer__ = "mundialis GmbH & Co. KG"
 
 
-from flask import request
 import requests
-
-from cloudevents.http import from_http
 from cloudevents.conversion import to_binary, to_structured
-from cloudevents.http import CloudEvent
+from cloudevents.http import CloudEvent, from_http
+from flask import request
 
 
 def receive_cloud_event():
-    """Return cloudevent from postpody"""
+    """Return cloudevent from postpody."""
     # Parses CloudEvent 'data' and 'headers' into a CloudEvent.
     event = from_http(request.headers, request.get_data())
 
@@ -45,10 +43,10 @@ def receive_cloud_event():
     return event
 
 
-def cloud_event_to_process_chain(event):
-    """Return queue name for process chain of event"""
-
-    pc = event.get_data()["list"][0]
+def cloud_event_to_process_chain(event) -> str:
+    """Return queue name for process chain of event."""
+    # (Remove ruff-exception, when pc variable used)
+    pc = event.get_data()["list"][0]  # ruff: noqa: F841
     # !! TODO !!: pc to job
     # NOTE: as standalone app -> consider for queue name creation
     # HTTP POST pc to actinia-module plugin processing endpoint
@@ -67,13 +65,11 @@ def cloud_event_to_process_chain(event):
     #    -H "ce-id: 123" \
     #    -d '{"details":"queuename"}' \
     #    http://job-sink.knative-eventing.svc.cluster.local/default/job-sink-logger
-    actinia_job = "<queue_name>_<resource_id>"  # queue name and resource id
-
-    return actinia_job
+    return "<queue_name>_<resource_id>"  # queue name and resource id
 
 
 def send_binary_cloud_event(event, actinia_job, url):
-    """Return posted binary event with actinia_job"""
+    """Return posted binary event with actinia_job."""
     attributes = {
         "specversion": event["specversion"],
         "source": "/actinia-cloudevent-plugin",
@@ -92,7 +88,7 @@ def send_binary_cloud_event(event, actinia_job, url):
 
 
 def send_structured_cloud_event(event, actinia_job, url):
-    """Return posted structured event with actinia_job"""
+    """Return posted structured event with actinia_job."""
     attributes = {
         "specversion": event["specversion"],
         "source": "/actinia-cloudevent-plugin",

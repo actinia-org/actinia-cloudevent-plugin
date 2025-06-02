@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""
-Copyright (c) 2018-2025 mundialis GmbH & Co. KG
+"""Copyright (c) 2018-2025 mundialis GmbH & Co. KG.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,13 +35,13 @@ GENERATED_CONFIG = DEFAULT_CONFIG_PATH + "/actinia-cloudevent-plugin.cfg"
 
 
 class EVENTRECEIVER:
-    """Default config for cloudevent receiver"""
+    """Default config for cloudevent receiver."""
 
     url = "http://localhost:3000/"
 
 
 class LOGCONFIG:
-    """Default config for logging"""
+    """Default config for logging."""
 
     logfile = "actinia-cloudevent-plugin.log"
     level = "DEBUG"
@@ -51,15 +49,13 @@ class LOGCONFIG:
 
 
 class Configfile:
-    """Configuration file"""
+    """Configuration file."""
 
-    def __init__(self):
-        """
-        This class will overwrite the config classes above when config files
+    def __init__(self) -> None:
+        """This class will overwrite the config classes above when config files
         named DEFAULT_CONFIG_PATH/**/*.ini exist.
         On first import of the module it is initialized.
         """
-
         config = configparser.ConfigParser()
         config.read(CONFIG_FILES)
         if len(config) <= 1:
@@ -67,7 +63,7 @@ class Configfile:
             return
         print("Loading config files: " + str(CONFIG_FILES) + " ...")
 
-        with open(GENERATED_CONFIG, "w") as configfile:
+        with open(GENERATED_CONFIG, "w", encoding="utf-8") as configfile:
             config.write(configfile)
         print("Configuration written to " + GENERATED_CONFIG)
 

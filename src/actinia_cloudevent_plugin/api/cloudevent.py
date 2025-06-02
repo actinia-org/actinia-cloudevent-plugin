@@ -28,8 +28,8 @@ from flask_restful_swagger_2 import Resource, swagger
 
 from actinia_cloudevent_plugin.apidocs import cloudevent
 from actinia_cloudevent_plugin.core.processing import (
-    receive_cloud_event,
     cloud_event_to_process_chain,
+    receive_cloud_event,
     send_binary_cloud_event,
     # send_structured_cloud_event,
 )
@@ -40,7 +40,8 @@ from actinia_cloudevent_plugin.resources.config import EVENTRECEIVER
 
 
 class Cloudevent(Resource):
-    """Receives cloudevent, transorms to process chain,
+    """
+    Receives cloudevent, transorms to process chain,
     and returns cloudevent with queue name.
     """
 
@@ -52,12 +53,12 @@ class Cloudevent(Resource):
         )
 
     def get(self):
-        """Cloudevent get method: not allowed response"""
+        """Cloudevent get method: not allowed response."""
         res = jsonify(
             SimpleStatusCodeResponseModel(
                 status=405,
                 message="Method Not Allowed",
-            )
+            ),
         )
         return make_response(res, 405)
 
@@ -83,7 +84,9 @@ class Cloudevent(Resource):
         # a CloudEvents enabled receiver as well as one that is unaware of CloudEvents.
         url = EVENTRECEIVER.url
         event_returned = send_binary_cloud_event(
-            event_received, actinia_job, url
+            event_received,
+            actinia_job,
+            url,
         )
 
         return SimpleStatusCodeResponseModel(

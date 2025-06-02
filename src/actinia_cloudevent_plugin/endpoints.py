@@ -24,13 +24,13 @@ __maintainer__ = "mundialis GmbH & Co. KG"
 
 
 import sys
+
 import werkzeug
-
-from flask_restful_swagger_2 import Api
 from flask import current_app, send_from_directory
+from flask_restful_swagger_2 import Api
 
-from actinia_cloudevent_plugin.resources.logging import log
 from actinia_cloudevent_plugin.api.cloudevent import Cloudevent
+from actinia_cloudevent_plugin.resources.logging import log
 
 
 # endpoints loaded if run as actinia-core plugin as well as standalone app

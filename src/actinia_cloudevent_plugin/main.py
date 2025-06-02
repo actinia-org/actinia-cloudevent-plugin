@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""
-Copyright (c) 2025 mundialis GmbH & Co. KG
+"""Copyright (c) 2025 mundialis GmbH & Co. KG.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -30,7 +28,6 @@ from flask_restful_swagger_2 import Api
 
 from actinia_cloudevent_plugin.endpoints import create_endpoints
 from actinia_cloudevent_plugin.resources.logging import log
-
 
 app = Flask(__name__)
 # allows endpoints with and without trailing slashes
