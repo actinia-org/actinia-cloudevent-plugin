@@ -40,11 +40,7 @@ from actinia_cloudevent_plugin.resources.config import EVENTRECEIVER
 
 
 class Cloudevent(Resource):
-    """Cloudevent handling.
-
-    Receives cloudevent, transorms to process chain,
-    and returns cloudevent with queue name.
-    """
+    """Cloudevent handling."""
 
     def __init__(self) -> None:
         """Cloudevent class initialisation."""
@@ -65,11 +61,18 @@ class Cloudevent(Resource):
 
     @swagger.doc(cloudevent.describe_cloudevent_post_docs)
     def post(self) -> SimpleStatusCodeResponseModel:
-        """Cloudevent post method with cloudevent from postbody."""
+        """Cloudevent post method with cloudevent from postbody.
+
+        Receives cloudevent, transforms to process chain (pc),
+        sends pc to actinia + start process,
+        and returns cloudevent with queue name.
+        """
         # Transform postbody to cloudevent
         event_received = receive_cloud_event()
-        # With received process chain start actinia process
+        # With received process chain start actinia process + return cloudevent
         actinia_job = cloud_event_to_process_chain(event_received)
+        # URL to which the generated cloudevent is sent
+        url = EVENTRECEIVER.url
         # TODO: binary or structured cloud event?
         # From https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#message
         # A "structured-mode message" is one where the entire event (attributes and data)
@@ -83,7 +86,6 @@ class Cloudevent(Resource):
         # typically allows for extension attributes.
         # In other words, a binary formatted CloudEvent would work for both
         # a CloudEvents enabled receiver as well as one that is unaware of CloudEvents.
-        url = EVENTRECEIVER.url
         event_returned = send_binary_cloud_event(
             event_received,
             actinia_job,

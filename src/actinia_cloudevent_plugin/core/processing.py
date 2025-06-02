@@ -53,7 +53,7 @@ def cloud_event_to_process_chain(event) -> str:
     # # # include an identifier for grouping cloudevents of same actinia process (?)
     # # # (e.g. new metadata field "queue_name", or within data, or use existign id)
     # -> actinia core returns resource-url, including resource_id  (and queue name)
-    #   (queuename = xx_<resource_id>; if conifgured accordingly within actinia -> each job own queue)
+    #   (queuename = xx_<resource_id>; if configured accordingly within actinia -> each job own queue)
     # via knative jobsink: start actinia worker (with queue name)
     # (https://knative.dev/docs/eventing/sinks/job-sink/#usage)
     # e.g. HTTP POST with queue name
