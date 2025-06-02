@@ -40,7 +40,7 @@ werkzeugLog = logging.getLogger("werkzeug")
 gunicornLog = logging.getLogger("gunicorn")
 
 
-def setLogFormat(veto=None):
+def set_log_format(veto=None):
     """Set format of logs."""
     logformat = ""
     if LOGCONFIG.type == "json" and not veto:
@@ -58,7 +58,7 @@ def setLogFormat(veto=None):
     return logformat
 
 
-def setLogHandler(logger, logtype, logformat) -> None:
+def set_log_handler(logger, logtype, logformat) -> None:
     """Set handling of logs."""
     if logtype == "stdout":
         handler = logging.StreamHandler()
@@ -91,31 +91,31 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
         log_record["component"] = record.name
 
 
-def createLogger() -> None:
+def create_logger() -> None:
     """Create logger, set level and define format."""
     log.setLevel(getattr(logging, LOGCONFIG.level))
-    fileformat = setLogFormat("veto")
-    stdoutformat = setLogFormat()
-    setLogHandler(log, "file", fileformat)
-    setLogHandler(log, "stdout", stdoutformat)
+    fileformat = set_log_format("veto")
+    stdoutformat = set_log_format()
+    set_log_handler(log, "file", fileformat)
+    set_log_handler(log, "stdout", stdoutformat)
 
 
-def createWerkzeugLogger() -> None:
+def create_werkzeug_logger() -> None:
     """Create werkzeug-logger, set level and define format."""
     werkzeugLog.setLevel(getattr(logging, LOGCONFIG.level))
-    fileformat = setLogFormat("veto")
-    stdoutformat = setLogFormat()
-    setLogHandler(werkzeugLog, "file", fileformat)
-    setLogHandler(werkzeugLog, "stdout", stdoutformat)
+    fileformat = set_log_format("veto")
+    stdoutformat = set_log_format()
+    set_log_handler(werkzeugLog, "file", fileformat)
+    set_log_handler(werkzeugLog, "stdout", stdoutformat)
 
 
-def createGunicornLogger() -> None:
+def create_gunicorn_logger() -> None:
     """Create gunicorn-logger, set level and define format."""
     gunicornLog.setLevel(getattr(logging, LOGCONFIG.level))
-    fileformat = setLogFormat("veto")
-    stdoutformat = setLogFormat()
-    setLogHandler(gunicornLog, "file", fileformat)
-    setLogHandler(gunicornLog, "stdout", stdoutformat)
+    fileformat = set_log_format("veto")
+    stdoutformat = set_log_format()
+    set_log_handler(gunicornLog, "file", fileformat)
+    set_log_handler(gunicornLog, "stdout", stdoutformat)
     # gunicorn already has a lot of children logger, e.g gunicorn.http,
     # gunicorn.access. These lines deactivate their default handlers.
     # pylint: disable=E1101
@@ -125,6 +125,6 @@ def createGunicornLogger() -> None:
             logging.getLogger(name).handlers = []
 
 
-createLogger()
-createWerkzeugLogger()
-createGunicornLogger()
+create_logger()
+create_werkzeug_logger()
+create_gunicorn_logger()

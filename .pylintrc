@@ -23,10 +23,8 @@ max-module-lines=800 # Default: 1000
 ignore-long-lines=.*COPYRIGHT:.* |# . description:.*|\s*(# )?.*http.:\/\/\S+?|# %%*
 
 [MESSAGES CONTROL]
-# C0301: Line too long
-# C0103: Function name doesn't conform to snake_case naming style 
+# C0301: Line too long (already captured by other linters)
 disable=C0301
-disable=C0103
 
 [VARIABLES]
 additional-builtins=_ # Default: ()
