@@ -6,11 +6,11 @@ RUN apk update; \
     apk add --no-cache python3 python3-dev
 ENV PATH="/opt/venv/bin:$PATH"
 RUN /usr/bin/python -m venv --system-site-packages --without-pip /opt/venv
-# hadolint ignore=DL3018
+# hadolint ignore=DL3013
 RUN python -m ensurepip && pip3 install --no-cache-dir --upgrade pip pep517 wheel
 
 # gunicorn
-# hadolint ignore=DL3018
+# hadolint ignore=DL3013
 RUN pip3 install --no-cache-dir gunicorn
 
 COPY . /src/actinia-cloudevent-plugin/
