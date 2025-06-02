@@ -47,20 +47,20 @@ apidoc = Api(
     title="actinia-cloudevent-plugin",
     prefix=URL_PREFIX,
     api_version=API_VERSION,
-    api_spec_url=f'{URL_PREFIX}/swagger',
-    schemes=['https', 'http'],
-    consumes=['application/json'],
+    api_spec_url=f"{URL_PREFIX}/swagger",
+    schemes=["https", "http"],
+    consumes=["application/json"],
     description="""Receives cloudevent,
                    transforms it to an actinia process chain
                    and returns cloudevent back.
-                   """
+                   """,
 )
 
 create_endpoints(apidoc)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # call this for development only with `python3 -m actinia_cloudevent_plugin.main`
-    log.debug('starting app in development mode...')
+    log.debug("starting app in development mode...")
     app.run(debug=True, use_reloader=False)
     # for production environent use application in wsgi.py

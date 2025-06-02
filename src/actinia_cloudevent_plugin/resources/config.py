@@ -31,22 +31,24 @@ from pathlib import Path
 # config can be overwritten by mounting *.ini files into folders inside
 # the config folder.
 DEFAULT_CONFIG_PATH = "config"
-CONFIG_FILES = [str(f) for f in Path(
-    DEFAULT_CONFIG_PATH).glob('**/*.ini') if f.is_file()]
-GENERATED_CONFIG = DEFAULT_CONFIG_PATH + '/actinia-cloudevent-plugin.cfg'
+CONFIG_FILES = [
+    str(f) for f in Path(DEFAULT_CONFIG_PATH).glob("**/*.ini") if f.is_file()
+]
+GENERATED_CONFIG = DEFAULT_CONFIG_PATH + "/actinia-cloudevent-plugin.cfg"
 
 
 class EVENTRECEIVER:
     """Default config for cloudevent receiver"""
-    url = 'http://localhost:3000/'
+
+    url = "http://localhost:3000/"
 
 
 class LOGCONFIG:
-    """Default config for logging
-    """
-    logfile = 'actinia-cloudevent-plugin.log'
-    level = 'DEBUG'
-    type = 'stdout'
+    """Default config for logging"""
+
+    logfile = "actinia-cloudevent-plugin.log"
+    level = "DEBUG"
+    type = "stdout"
 
 
 class Configfile:
@@ -65,7 +67,7 @@ class Configfile:
             return
         print("Loading config files: " + str(CONFIG_FILES) + " ...")
 
-        with open(GENERATED_CONFIG, 'w') as configfile:
+        with open(GENERATED_CONFIG, "w") as configfile:
             config.write(configfile)
         print("Configuration written to " + GENERATED_CONFIG)
 

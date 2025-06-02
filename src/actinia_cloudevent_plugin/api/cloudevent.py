@@ -31,7 +31,7 @@ from actinia_cloudevent_plugin.core.processing import (
     receive_cloud_event,
     cloud_event_to_process_chain,
     send_binary_cloud_event,
-    #send_structured_cloud_event,
+    # send_structured_cloud_event,
 )
 from actinia_cloudevent_plugin.model.response_models import (
     SimpleStatusCodeResponseModel,
@@ -49,10 +49,12 @@ class Cloudevent(Resource):
         self.msg = "Received event <EVENT1> and returned event <EVENT2> with actinia-job <ACTINIA_JOB>."
 
     def get(self):
-        res = jsonify(SimpleStatusCodeResponseModel(
-            status=405,
-            message="Method Not Allowed",
-        ))
+        res = jsonify(
+            SimpleStatusCodeResponseModel(
+                status=405,
+                message="Method Not Allowed",
+            )
+        )
         return make_response(res, 405)
 
     @swagger.doc(cloudevent.describe_cloudevent_post_docs)
@@ -70,7 +72,13 @@ class Cloudevent(Resource):
         # In most cases a CloudEvent encoded as a binary-mode message will not break an existing receiver's processing of the event because the message's metadata typically allows for extension attributes.
         # In other words, a binary formatted CloudEvent would work for both a CloudEvents enabled receiver as well as one that is unaware of CloudEvents.
         url = EVENTRECEIVER.url
-        event_returned = send_binary_cloud_event(event_received, actinia_job, url)
-        
-        return SimpleStatusCodeResponseModel(status=204, message=self.msg.replace("<EVENT1>",event_received["id"]).replace("<EVENT2>", event_returned["id"]).replace("<ACTINIA_JOB>" ,actinia_job))
+        event_returned = send_binary_cloud_event(
+            event_received, actinia_job, url
+        )
 
+        return SimpleStatusCodeResponseModel(
+            status=204,
+            message=self.msg.replace("<EVENT1>", event_received["id"])
+            .replace("<EVENT2>", event_returned["id"])
+            .replace("<ACTINIA_JOB>", actinia_job),
+        )

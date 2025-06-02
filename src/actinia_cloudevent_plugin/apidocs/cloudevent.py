@@ -33,8 +33,10 @@ describe_cloudevent_post_docs = {
     "description": "Receives cloudevent, generates queue name and returns cloudevent.",
     "responses": {
         "200": {
-            "description": ("This response returns received, and returned events, "
-                            "generated queue name and the status"),
+            "description": (
+                "This response returns received, and returned events, "
+                "generated queue name and the status"
+            ),
             "schema": SimpleStatusCodeResponseModel,
         },
         "400": {
