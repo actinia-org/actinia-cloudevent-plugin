@@ -25,7 +25,7 @@ ignore-long-lines=.*COPYRIGHT:.* |# . description:.*|\s*(# )?.*http.:\/\/\S+?|# 
 [MESSAGES CONTROL]
 # C0301: Line too long
 # C0103: Function name doesn't conform to snake_case naming style 
-disable=C0301,C0103
+disable=C0301, C0103
 
 [VARIABLES]
 additional-builtins=_ # Default: ()
