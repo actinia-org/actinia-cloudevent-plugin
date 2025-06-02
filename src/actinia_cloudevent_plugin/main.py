@@ -17,7 +17,7 @@ limitations under the License.
 Application entrypoint. Creates Flask app and swagger docs, adds endpoints
 """
 
-__author__ = "Lina Krisztian"
+__author__ = "Carmen Tawalika, Lina Krisztian"
 __copyright__ = "2025-present mundialis GmbH & Co. KG"
 __license__ = "Apache-2.0"
 
