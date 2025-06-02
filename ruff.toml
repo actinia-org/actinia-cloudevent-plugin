@@ -1,6 +1,7 @@
 # A005 Module is shadowing a Python builtin module
 # ANN001 Missing type annotation for function argument
 # ANN201 Missing return type annotation for public function
+# ANN202 Missing return type annotation for private function
 # E501 Line too long (handled already with other linters)
 # FA102 future-required-type-annotation
 # N802 Function name should be lowercase
@@ -16,7 +17,7 @@
 # S606 start-process-with-no-shell
 # SIM102 Use a single `if` statement instead of nested `if` statement
 
-lint.ignore = ["ANN001", "ANN201", "E501", "FA102", "N802", "N816", "PLR0913", "PLR0917", "PLR6301", "PLW0603", "S107", "S113", "S606"]
+lint.ignore = ["ANN001", "ANN201", "ANN202", "E501", "FA102", "N802", "N816", "PLR0913", "PLR0917", "PLR6301", "PLW0603", "S107", "S113", "S606"]
 
 [lint.per-file-ignores]
 "tests/testsuite.py" = [ "PLC0415",]

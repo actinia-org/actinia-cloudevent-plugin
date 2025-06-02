@@ -39,7 +39,7 @@ def create_endpoints(flask_api: Api) -> None:
     app = flask_api.app
     apidoc = flask_api
 
-    package = sys._getframe().f_back.f_globals["__package__"]
+    package = sys._getframe().f_back.f_globals["__package__"]  # noqa: SLF001
     if package != "actinia_core":
 
         @app.route("/")
