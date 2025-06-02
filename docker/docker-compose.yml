@@ -3,10 +3,12 @@ services:
   actinia-cloudevent:
     build:
       context: ..
-      dockerfile: docker/actinia-cloudevent-plugin-alpine/Dockerfile
+      dockerfile: docker/Dockerfile
+    # -- For dev-setup mount plugin src code:
+    # volumes:
+    #   - ..:/src/actinia-cloudevent-plugin/.
     cap_add:
       - SYS_PTRACE
     ports:
       - "5000:5000"
     network_mode: "host"
-

@@ -16,8 +16,10 @@ gunicorn -b 0.0.0.0:5000 -w 8 --access-logfile=- -k gthread actinia_cloudevent_p
 
 ### DEV setup
 ```bash
-docker compose -f docker/docker-compose-dev.yml build
-docker compose -f docker/docker-compose-dev.yml run --rm --service-ports --entrypoint sh actinia-cloudevent
+# Uncomment the volume mount of the cloud-event-plugin within docker/docker-compose.yml,
+# then:
+docker compose -f docker/docker-compose.yml build
+docker compose -f docker/docker-compose.yml run --rm --service-ports --entrypoint sh actinia-cloudevent
 # within docker:
 # install the plugin
 pip3 install .

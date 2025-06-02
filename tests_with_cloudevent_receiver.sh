@@ -1,9 +1,12 @@
 #!/usr/bin/env sh
 
-# start kvdb server
-valkey-server &
-sleep 1
-valkey-cli ping
+# start cloud event receiver server
+# TODO
+
+# # start kvdb server
+# valkey-server &
+# sleep 1
+# valkey-cli ping
 
 # start webhook server
 webhook-server --host "0.0.0.0" --port "5005" &
