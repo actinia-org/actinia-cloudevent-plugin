@@ -52,6 +52,7 @@ class Cloudevent(Resource):
         )
 
     def get(self):
+        """Cloudevent get method: not allowed response"""
         res = jsonify(
             SimpleStatusCodeResponseModel(
                 status=405,

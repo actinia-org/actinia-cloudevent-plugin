@@ -22,12 +22,12 @@ __author__ = "Carmen Tawalika, Anika Weinmann"
 __copyright__ = "Copyright 2022-2024 mundialis GmbH & Co. KG"
 __maintainer__ = "mundialis GmbH & Co. KG"
 
-from flask_restful_swagger_2 import Api
-from flask import current_app, send_from_directory
 
 import sys
 import werkzeug
 
+from flask_restful_swagger_2 import Api
+from flask import current_app, send_from_directory
 
 from actinia_cloudevent_plugin.resources.logging import log
 from actinia_cloudevent_plugin.api.cloudevent import Cloudevent
@@ -41,7 +41,6 @@ def create_endpoints(flask_api: Api) -> None:
 
     package = sys._getframe().f_back.f_globals["__package__"]
     if package != "actinia_core":
-
         @app.route("/")
         def index():
             try:

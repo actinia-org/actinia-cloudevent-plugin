@@ -44,6 +44,7 @@ gunicornLog = logging.getLogger("gunicorn")
 
 
 def setLogFormat(veto=None):
+    """Set format of logs"""
     logformat = ""
     if LOGCONFIG.type == "json" and not veto:
         logformat = CustomJsonFormatter(
@@ -61,6 +62,7 @@ def setLogFormat(veto=None):
 
 
 def setLogHandler(logger, type, format):
+    """Set handling of logs"""
     if type == "stdout":
         handler = logging.StreamHandler()
     elif type == "file":
@@ -71,6 +73,7 @@ def setLogHandler(logger, type, format):
 
 
 class CustomJsonFormatter(jsonlogger.JsonFormatter):
+    """Customized formatting of logs as json"""
     def add_fields(self, log_record, record, message_dict):
         super(CustomJsonFormatter, self).add_fields(
             log_record, record, message_dict
@@ -89,7 +92,7 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
 
 
 def createLogger():
-    # create logger, set level and define format
+    """create logger, set level and define format"""
     log.setLevel(getattr(logging, LOGCONFIG.level))
     fileformat = setLogFormat("veto")
     stdoutformat = setLogFormat()
@@ -98,6 +101,7 @@ def createLogger():
 
 
 def createWerkzeugLogger():
+    """create werkzeug-logger, set level and define format"""
     werkzeugLog.setLevel(getattr(logging, LOGCONFIG.level))
     fileformat = setLogFormat("veto")
     stdoutformat = setLogFormat()
@@ -106,6 +110,7 @@ def createWerkzeugLogger():
 
 
 def createGunicornLogger():
+    """create gunicorn-logger, set level and define format"""
     gunicornLog.setLevel(getattr(logging, LOGCONFIG.level))
     fileformat = setLogFormat("veto")
     stdoutformat = setLogFormat()
@@ -113,6 +118,7 @@ def createGunicornLogger():
     setLogHandler(gunicornLog, "stdout", stdoutformat)
     # gunicorn already has a lot of children logger, e.g gunicorn.http,
     # gunicorn.access. These lines deactivate their default handlers.
+    # pylint: disable=E1101
     for name in logging.root.manager.loggerDict:
         if "gunicorn." in name:
             logging.getLogger(name).propagate = True

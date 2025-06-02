@@ -51,6 +51,7 @@ class LOGCONFIG:
 
 
 class Configfile:
+    """Configuration file """
 
     def __init__(self):
         """
