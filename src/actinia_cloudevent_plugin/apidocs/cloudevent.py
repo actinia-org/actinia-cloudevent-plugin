@@ -31,9 +31,8 @@ describe_cloudevent_post_docs = {
     # "summary" is taken from the description of the get method
     "tags": ["cloudevent"],
     "description": (
-        "Receives cloudevent, generates queue name "
-        "and returns cloudevent."
-        ),
+        "Receives cloudevent, generates queue name and returns cloudevent."
+    ),
     "responses": {
         "200": {
             "description": (

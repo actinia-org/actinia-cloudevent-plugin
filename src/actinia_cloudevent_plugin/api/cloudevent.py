@@ -46,8 +46,10 @@ class Cloudevent(Resource):
 
     def __init__(self) -> None:
         """Cloudevent class initialisation."""
-        self.msg = ("Received event <EVENT1> and returned event <EVENT2>"
-                    " with actinia-job <ACTINIA_JOB>.")
+        self.msg = (
+            "Received event <EVENT1> and returned event <EVENT2>"
+            " with actinia-job <ACTINIA_JOB>."
+        )
 
     def get(self):
         res = jsonify(
