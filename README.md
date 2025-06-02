@@ -44,7 +44,8 @@ docker compose -f docker/docker-compose-dev.yml up -d
 
 You can test the plugin and request the `/` endpoint, e.g. with:
 ```bash
-# Start server for receiving of cloudevents (returned with queue name)
+# Start server for receiving of cloudevents (which are returned as response)
+# NOTE: as defined within config/mount/sample.ini: [EVENTRECEIVER]
 python3 tests/cloudevent_receiver_server.py
 
 # In another terminal
@@ -52,7 +53,7 @@ JSON=tests/cloudevent_example.json
 curl -X POST -H 'Content-Type: application/json' --data @$JSON localhost:5000/api/v1/ | jq
 ```
 
-### Hints
+## Hints
 
 * If you have no `.git` folder in the plugin folder, you need to set the
 `SETUPTOOLS_SCM_PRETEND_VERSION` before installing the plugin:
@@ -67,7 +68,7 @@ curl -X POST -H 'Content-Type: application/json' --data @$JSON localhost:5000/ap
     rm -rf /usr/lib/python3.8/site-packages/actinia_cloudevent_plugin.wsgi-*.egg
     ```
 
-### Running tests - **TODO**
+## Running tests - **TODO**
 You can run the tests in the actinia test docker:
 
 ```bash

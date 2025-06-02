@@ -28,26 +28,6 @@ from typing import ClassVar
 from flask_restful_swagger_2 import Schema
 
 
-# NOTE: only used for helloworld testing endpoints
-class SimpleResponseModel(Schema):
-    """Simple response schema to inform about status."""
-
-    type = "object"
-    properties = {
-        "status": {
-            "type": "string",
-            "description": "The status of the resource, values: accepted, "
-            "running, finished, terminated, error",
-        },
-        "message": {
-            "type": "string",
-            "description": "A simple message to describes the status of the "
-            "resource",
-        },
-    }
-    required = ["status", "message"]
-
-
 class SimpleStatusCodeResponseModel(Schema):
     """Simple response schema to inform about status."""
 

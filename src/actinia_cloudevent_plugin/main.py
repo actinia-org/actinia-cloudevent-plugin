@@ -24,16 +24,12 @@ __copyright__ = "2025-present mundialis GmbH & Co. KG"
 __license__ = "Apache-2.0"
 
 
-from flask import Flask, request, Response
+from flask import Flask
 from flask_cors import CORS
 from flask_restful_swagger_2 import Api
 
 from actinia_cloudevent_plugin.endpoints import create_endpoints
-# TODO
-# from actinia_gdi.core.jobtable import initJobDB
-# -> difference to kvdb?
 from actinia_cloudevent_plugin.resources.logging import log
-# from actinia_cloudevent_plugin.resources.config import APP
 
 
 app = Flask(__name__)
@@ -61,8 +57,6 @@ apidoc = Api(
 )
 
 create_endpoints(apidoc)
-# TODO
-# initJobDB()
 
 
 if __name__ == '__main__':

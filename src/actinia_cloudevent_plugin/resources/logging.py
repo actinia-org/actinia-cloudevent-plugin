@@ -20,7 +20,7 @@ Logging interface
 """
 
 __license__ = "Apache-2.0"
-__author__ = "Carmen Tawalika, Lina Krisztian"
+__author__ = "Carmen Tawalika"
 __copyright__ = "Copyright 2025, mundialis"
 __maintainer__ = ""
 

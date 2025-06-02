@@ -58,14 +58,3 @@ def create_endpoints(flask_api: Api) -> None:
             return send_from_directory(app.static_folder, filename)
 
     apidoc.add_resource(Cloudevent, "/")
-    
-    # from actinia_cloudevent_plugin.api.project_helloworld import ProjectHelloWorld
-    # apidoc.add_resource(
-    #     ProjectHelloWorld,
-    #     "/helloworld/projects/",
-    # )
-    # from actinia_cloudevent_plugin.api.helloworld import HelloWorld
-    # apidoc.add_resource(
-    #     HelloWorld,
-    #     "/helloworld",
-    # )
