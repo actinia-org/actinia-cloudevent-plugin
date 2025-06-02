@@ -46,7 +46,7 @@ def receive_cloud_event():
 def cloud_event_to_process_chain(event) -> str:
     """Return queue name for process chain of event."""
     # (Remove ruff-exception, when pc variable used)
-    pc = event.get_data()["list"][0]  # ruff: noqa: F841
+    pc = event.get_data()["list"][0]  # noqa: F841
     # !! TODO !!: pc to job
     # NOTE: as standalone app -> consider for queue name creation
     # HTTP POST pc to actinia-module plugin processing endpoint

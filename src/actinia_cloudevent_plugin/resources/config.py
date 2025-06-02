@@ -52,7 +52,8 @@ class Configfile:
     """Configuration file."""
 
     def __init__(self) -> None:
-        """This class will overwrite the config classes above when config files
+        """
+        Will overwrite the config classes above when config files
         named DEFAULT_CONFIG_PATH/**/*.ini exist.
         On first import of the module it is initialized.
         """
@@ -63,7 +64,7 @@ class Configfile:
             return
         print("Loading config files: " + str(CONFIG_FILES) + " ...")
 
-        with open(GENERATED_CONFIG, "w", encoding="utf-8") as configfile:
+        with open(GENERATED_CONFIG, "w", encoding="utf-8") as configfile:  # noqa: PTH123
             config.write(configfile)
         print("Configuration written to " + GENERATED_CONFIG)
 

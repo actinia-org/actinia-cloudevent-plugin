@@ -24,7 +24,7 @@ __maintainer__ = ""
 
 
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from logging import FileHandler
 
 from colorlog import ColoredFormatter
@@ -58,14 +58,14 @@ def setLogFormat(veto=None):
     return logformat
 
 
-def setLogHandler(logger, type, format) -> None:
+def setLogHandler(logger, logtype, logformat) -> None:
     """Set handling of logs."""
-    if type == "stdout":
+    if logtype == "stdout":
         handler = logging.StreamHandler()
-    elif type == "file":
+    elif logtype == "file":
         # For readability, json is never written to file
         handler = FileHandler(LOGCONFIG.logfile)
-    handler.setFormatter(format)
+    handler.setFormatter(logformat)
     logger.addHandler(handler)
 
 
@@ -73,8 +73,8 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
     """Customized formatting of logs as json."""
 
     def add_fields(self, log_record, record, message_dict) -> None:
-        """Add fiels for json log"""
-        super(CustomJsonFormatter, self).add_fields(
+        """Add fiels for json log."""
+        super(CustomJsonFormatter, self).add_fields(  # noqa: UP008
             log_record,
             record,
             message_dict,
@@ -85,8 +85,7 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
         # ,'getMessage', 'levelname', 'levelno', 'lineno', 'message', 'module',
         # 'msecs', 'msg', 'name', 'pathname', 'process', 'processName',
         # 'relativeCreated', 'stack_info', 'thread', 'threadName']
-
-        now = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+        now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
         log_record["time"] = now
         log_record["level"] = record.levelname
         log_record["component"] = record.name
