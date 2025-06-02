@@ -52,7 +52,7 @@ class Configfile:
     """Configuration file."""
 
     def __init__(self) -> None:
-        """Overwrite config classes
+        """Overwrite config classes.
 
         Will overwrite the config classes above when config files
         named DEFAULT_CONFIG_PATH/**/*.ini exist.

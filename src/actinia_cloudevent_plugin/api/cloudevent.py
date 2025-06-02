@@ -40,7 +40,7 @@ from actinia_cloudevent_plugin.resources.config import EVENTRECEIVER
 
 
 class Cloudevent(Resource):
-    """Cloudevent handling
+    """Cloudevent handling.
 
     Receives cloudevent, transorms to process chain,
     and returns cloudevent with queue name.
