@@ -74,16 +74,17 @@ curl -X POST -H 'Content-Type: application/json' --data @$JSON localhost:5000/ap
 You can run the tests in the actinia test docker:
 
 ```bash
-docker build -f docker/actinia-cloudevent-plugin-test/Dockerfile -t actinia-cloudevent-plugin-test .
-docker run -it actinia-cloudevent-plugin-test -i
-
-cd /src/actinia-cloudevent-plugin/
+# Uncomment the volume mount of the cloud-event-plugin within docker/docker-compose.yml,
+# then:
+docker compose -f docker/docker-compose.yml build
+docker compose -f docker/docker-compose.yml run --rm --service-ports --entrypoint sh actinia-cloudevent
 
 # run all tests
 make test
 
 # run only unittests
 make unittest
+
 # run only integrationtests
 make integrationtest
 

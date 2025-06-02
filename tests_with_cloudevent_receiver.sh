@@ -1,20 +1,8 @@
 #!/usr/bin/env sh
 
 # start cloud event receiver server
-# TODO
-
-# # start kvdb server
-# valkey-server &
-# sleep 1
-# valkey-cli ping
-
-# start webhook server
-webhook-server --host "0.0.0.0" --port "5005" &
-sleep 10
-
-# run tests
-echo "${ACTINIA_CUSTOM_TEST_CFG}"
-echo "${DEFAULT_CONFIG_PATH}"
+python3 tests/cloudevent_receiver_server.py &
+sleep 1
 
 if [ "$1" = "dev" ]
 then
@@ -32,7 +20,6 @@ fi
 
 TEST_RES=$?
 
-# stop kvdb server
-valkey-cli shutdown
+# TODO!: stop cloud event receiver server
 
 return $TEST_RES
