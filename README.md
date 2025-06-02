@@ -36,7 +36,7 @@ docker compose -f docker/docker-compose-dev.yml up -d
 
 ## Configuration
 
-- the URL of the cloudevent receiver is defined within [config/mount/sample.ini](config/mount/sample.ini): `[EVENTRECEIVER]`
+- the URL of the cloudevent receiver is defined within [config/mount/sample.ini](config/mount/sample.ini): `[EVENTRECEIVER]` (Default value defined within [src/actinia_cloudevent_plugin/resources/config.py](src/actinia_cloudevent_plugin/resources/config.py))
 
 ## Requesting endpoint
 
