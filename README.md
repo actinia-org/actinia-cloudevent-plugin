@@ -70,7 +70,7 @@ curl -X POST -H 'Content-Type: application/json' --data @$JSON localhost:5000/ap
     rm -rf /usr/lib/python3.8/site-packages/actinia_cloudevent_plugin.wsgi-*.egg
     ```
 
-## Running tests - **TODO**
+## Running tests
 You can run the tests in the actinia test docker:
 
 ```bash
