@@ -2,6 +2,7 @@
 
 # start cloud event receiver server
 python3 tests/cloudevent_receiver_server.py &
+SERVER_PID=$!
 sleep 1
 
 if [ "$1" = "dev" ]
@@ -20,6 +21,7 @@ fi
 
 TEST_RES=$?
 
-# TODO: stop cloud event receiver server
+# stop cloud event receiver server, when tests finished
+kill $SERVER_PID
 
 return $TEST_RES
