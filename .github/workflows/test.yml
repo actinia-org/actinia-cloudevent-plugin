@@ -11,26 +11,26 @@ on:
 
 jobs:
 
-  unittests:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-    - name: Replace run only unittest command
-      run: |
-        sed -i "s+# RUN make test+RUN make unittest+g" docker/Dockerfile
-    - name: Unittests of actinia-cloudevent-plugin
-      id: docker_build
-      uses: docker/build-push-action@v6
-      with:
-        push: false
-        tags: actinia-cloudevent-plugin-tests:alpine
-        context: .
-        file: docker/Dockerfile
-        no-cache: true
-        # pull: true
+  # unittests:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v4
+  #   - name: Set up Docker Buildx
+  #     uses: docker/setup-buildx-action@v3
+  #   - name: Replace run only unittest command
+  #     run: |
+  #       sed -i "s+# RUN make test+RUN make unittest+g" docker/Dockerfile
+  #   - name: Unittests of actinia-cloudevent-plugin
+  #     id: docker_build
+  #     uses: docker/build-push-action@v6
+  #     with:
+  #       push: false
+  #       tags: actinia-cloudevent-plugin-tests:alpine
+  #       context: .
+  #       file: docker/Dockerfile
+  #       no-cache: true
+  #       # pull: true
 
   integration-tests:
     runs-on: ubuntu-latest

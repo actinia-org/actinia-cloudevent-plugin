@@ -51,9 +51,11 @@ You can test the plugin and request the `/` endpoint, e.g. with:
 python3 tests/cloudevent_receiver_server.py
 
 # In another terminal
-JSON=tests/cloudevent_example.json
+JSON=tests/examples/cloudevent_example.json
 curl -X POST -H 'Content-Type: application/json' --data @$JSON localhost:5000/api/v1/ | jq
 ```
+
+Exemplary returned cloudevent: [tests/examples/cloudevent_example_return.json](tests/examples/cloudevent_example_return.json)
 
 ## Hints
 
@@ -82,8 +84,8 @@ docker compose -f docker/docker-compose.yml run --rm --service-ports --entrypoin
 # run all tests
 make test
 
-# run only unittests
-make unittest
+# # run only unittests
+# make unittest
 
 # run only integrationtests
 make integrationtest
