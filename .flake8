@@ -2,5 +2,12 @@
 
 # F401 'module' imported but unused
 # E501 line too long (83 > 79 characters)
+# F841 local variable 'pc' is assigned to but never used
 
 exclude = .git,.pycache,build,.eggs
+
+per-file-ignores =
+    ./tests/cloudevent_receiver_server.py: E501
+    # remove when implemented:
+    ./src/actinia_cloudevent_plugin/api/cloudevent.py: E501
+    ./src/actinia_cloudevent_plugin/core/processing.py: F841, E501

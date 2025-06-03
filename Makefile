@@ -19,13 +19,13 @@ dist:
 	python3 setup.py dist
 
 test:
-	./tests_with_kvdb.sh
+	./tests_with_cloudevent_receiver.sh
 
 unittest:
-	./tests_with_kvdb.sh unittest
+	./tests_with_cloudevent_receiver.sh unittest
 
 devtest:
-	./tests_with_kvdb.sh dev
+	./tests_with_cloudevent_receiver.sh dev
 
 integrationtest:
-	./tests_with_kvdb.sh integrationtest
+	./tests_with_cloudevent_receiver.sh integrationtest

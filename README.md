@@ -1,76 +1,90 @@
 # actinia-cloudevent-plugin
 
-This is an plugin for [actinia-core](https://github.com/mundialis/actinia_core) which adds cloudevent endpoints to actinia-core.
+This is a plugin for [actinia-core](https://github.com/mundialis/actinia_core) which adds cloudevent endpoints and runs as standalone app.
 
-You can run actinia-cloudevent-plugin as an actinia-core plugin.
+## Installation and Setup
 
-## Installation
 Use docker-compose for installation:
 ```bash
 docker compose -f docker/docker-compose.yml build
-docker compose -f docker/docker-compose.yml up -d
+docker compose -f docker/docker-compose.yml run --rm --service-ports --entrypoint sh actinia-cloudevent
+# within docker
+gunicorn -b 0.0.0.0:5000 -w 8 --access-logfile=- -k gthread actinia_cloudevent_plugin.main:flask_app
+```
+
+### DEV setup
+```bash
+# Uncomment the volume mount of the cloud-event-plugin within docker/docker-compose.yml,
+# then:
+docker compose -f docker/docker-compose.yml build
+docker compose -f docker/docker-compose.yml run --rm --service-ports --entrypoint sh actinia-cloudevent
+# within docker:
+# install the plugin
+pip3 install .
+# start flask app with actinia-cloudevent-plugin
+python3 -m actinia_cloudevent_plugin.main
 ```
 
 ### Installation hints
 * If you get an error like: `ERROR: for docker_kvdb_1  Cannot start service valkey: network xxx not found` you can try the following:
 ```bash
-docker compose -f docker/docker-compose.yml down
+docker compose -f docker/docker-compose-dev.yml down
 # remove all custom networks not used by a container
 docker network prune
-docker compose -f docker/docker-compose.yml up -d
+docker compose -f docker/docker-compose-dev.yml up -d
 ```
 
-### Requesting helloworld endpoint
-You can test the plugin and request the `/helloworld` endpoint, e.g. with:
+## Configuration
+
+- the URL of the cloudevent receiver is defined within [config/mount/sample.ini](config/mount/sample.ini): `[EVENTRECEIVER]` (Default value defined within [src/actinia_cloudevent_plugin/resources/config.py](src/actinia_cloudevent_plugin/resources/config.py))
+
+## Requesting endpoint
+
+**Note**: Assuming cloudevent-plugin is running as described in previous setup.
+
+You can test the plugin and request the `/` endpoint, e.g. with:
 ```bash
-curl -u actinia-gdi:actinia-gdi -X GET http://localhost:8088/api/v3/helloworld | jq
+# Start server for receiving of cloudevents (which are returned as response)
+# NOTE: as defined within config/mount/sample.ini: [EVENTRECEIVER]
+python3 tests/cloudevent_receiver_server.py
 
-curl -u actinia-gdi:actinia-gdi -H 'accept: application/json' -H 'Content-Type: application/json' -X POST http://localhost:8088/api/v3/helloworld -d '{"name": "test"}' | jq
+# In another terminal
+JSON=tests/examples/cloudevent_example.json
+curl -X POST -H 'Content-Type: application/json' --data @$JSON localhost:5000/api/v1/ | jq
 ```
 
-## DEV setup
-For a DEV setup you can use the docker/docker-compose.yml:
-```bash
-docker compose -f docker/docker-compose.yml build
-docker compose -f docker/docker-compose.yml run --rm --service-ports --entrypoint sh actinia
+Exemplary returned cloudevent: [tests/examples/cloudevent_example_return.json](tests/examples/cloudevent_example_return.json)
 
-# install the plugin
-(cd /src/actinia-cloudevent-plugin && python3 setup.py install)
-# start actinia-core with your plugin
-sh /src/start.sh
-# gunicorn -b 0.0.0.0:8088 -w 1 --access-logfile=- -k gthread actinia_core.main:flask_app
-```
-
-### Hints
+## Hints
 
 * If you have no `.git` folder in the plugin folder, you need to set the
 `SETUPTOOLS_SCM_PRETEND_VERSION` before installing the plugin:
-```bash
-export SETUPTOOLS_SCM_PRETEND_VERSION=0.0
-```
-Otherwise you will get an error like this
-`LookupError: setuptools-scm was unable to detect version for '/src/actinia-cloudevent-plugin'.`.
+    ```bash
+    export SETUPTOOLS_SCM_PRETEND_VERSION=0.0
+    ```
+    Otherwise you will get an error like this `LookupError: setuptools-scm was unable to detect version for '/src/actinia-cloudevent-plugin'.`.
 
 * If you make changes in code and nothing changes you can try to uninstall the plugin:
-```bash
-pip3 uninstall actinia-cloudevent-plugin.wsgi -y
-rm -rf /usr/lib/python3.8/site-packages/actinia_cloudevent_plugin.wsgi-*.egg
-```
+    ```bash
+    pip3 uninstall actinia-cloudevent-plugin.wsgi -y
+    rm -rf /usr/lib/python3.8/site-packages/actinia_cloudevent_plugin.wsgi-*.egg
+    ```
 
-### Running tests
+## Running tests
 You can run the tests in the actinia test docker:
 
 ```bash
-docker build -f docker/actinia-cloudevent-plugin-test/Dockerfile -t actinia-cloudevent-plugin-test .
-docker run -it actinia-cloudevent-plugin-test -i
-
-cd /src/actinia-cloudevent-plugin/
+# Uncomment the volume mount of the cloud-event-plugin within docker/docker-compose.yml,
+# then:
+docker compose -f docker/docker-compose.yml build
+docker compose -f docker/docker-compose.yml run --rm --service-ports --entrypoint sh actinia-cloudevent
 
 # run all tests
 make test
 
-# run only unittests
-make unittest
+# # run only unittests
+# make unittest
+
 # run only integrationtests
 make integrationtest
 
