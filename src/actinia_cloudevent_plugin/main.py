@@ -29,10 +29,10 @@ from flask_restful_swagger_2 import Api
 from actinia_cloudevent_plugin.endpoints import create_endpoints
 from actinia_cloudevent_plugin.resources.logging import log
 
-app = Flask(__name__)
+flask_app = Flask(__name__)
 # allows endpoints with and without trailing slashes
-app.url_map.strict_slashes = False
-CORS(app)
+flask_app.url_map.strict_slashes = False
+CORS(flask_app)
 
 
 API_VERSION = "v1"
@@ -40,7 +40,7 @@ API_VERSION = "v1"
 URL_PREFIX = f"/api/{API_VERSION}"
 
 apidoc = Api(
-    app,
+    flask_app,
     title="actinia-cloudevent-plugin",
     prefix=URL_PREFIX,
     api_version=API_VERSION,
@@ -61,5 +61,5 @@ if __name__ == "__main__":
     # `python3 -m actinia_cloudevent_plugin.main`
     log.debug("starting app in development mode...")
     # ruff: S201 :Use of `debug=True` in Flask app detected
-    app.run(debug=True, use_reloader=False)  # noqa: S201
+    flask_app.run(debug=True, use_reloader=False)  # noqa: S201
     # for production environent use application in wsgi.py

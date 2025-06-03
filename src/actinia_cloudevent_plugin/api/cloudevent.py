@@ -22,9 +22,9 @@ __author__ = "Lina Krisztian"
 __copyright__ = "Copyright 2025 mundialis GmbH & Co. KG"
 __maintainer__ = "mundialis GmbH & Co. KG"
 
-
 from flask import jsonify, make_response
 from flask_restful_swagger_2 import Resource, swagger
+from requests.exceptions import ConnectionError  # noqa: A004
 
 from actinia_cloudevent_plugin.apidocs import cloudevent
 from actinia_cloudevent_plugin.core.processing import (
@@ -86,15 +86,19 @@ class Cloudevent(Resource):
         # typically allows for extension attributes.
         # In other words, a binary formatted CloudEvent would work for both
         # a CloudEvents enabled receiver as well as one that is unaware of CloudEvents.
-        event_returned = send_binary_cloud_event(
-            event_received,
-            actinia_job,
-            url,
-        )
-
-        return SimpleStatusCodeResponseModel(
-            status=204,
-            message=self.msg.replace("<EVENT1>", event_received["id"])
-            .replace("<EVENT2>", event_returned["id"])
-            .replace("<ACTINIA_JOB>", actinia_job),
-        )
+        try:
+            event_returned = send_binary_cloud_event(
+                event_received,
+                actinia_job,
+                url,
+            )
+            return SimpleStatusCodeResponseModel(
+                status=204,
+                message=self.msg.replace("<EVENT1>", event_received["id"])
+                .replace("<EVENT2>", event_returned["id"])
+                .replace("<ACTINIA_JOB>", actinia_job),
+            )
+        except ConnectionError as e:
+            return f"Connection ERROR when returning cloudevent: {e}"
+        except Exception() as e:
+            return f"ERROR when returning cloudevent: {e}"

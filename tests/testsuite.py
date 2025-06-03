@@ -24,7 +24,7 @@ __maintainer__ = "mundialis GmbH & Co. KG"
 
 import unittest
 
-from actinia_cloudevent_plugin.main import app as flask_app
+from actinia_cloudevent_plugin.main import flask_app
 
 
 class TestCase(unittest.TestCase):
