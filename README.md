@@ -9,8 +9,6 @@ Use docker-compose for installation:
 docker compose -f docker/docker-compose.yml build
 docker compose -f docker/docker-compose.yml run --rm --service-ports --entrypoint sh actinia-cloudevent
 # within docker
-# TODO: FIX
-# gunicorn.errors.HaltServer: <HaltServer 'App failed to load.' 4>
 gunicorn -b 0.0.0.0:5000 -w 8 --access-logfile=- -k gthread actinia_cloudevent_plugin.main:flask_app
 ```
 
@@ -42,7 +40,7 @@ docker compose -f docker/docker-compose-dev.yml up -d
 
 ## Requesting endpoint
 
-**Note**: Assuming cloudevent-plugin is running as described in previous DEV setup.
+**Note**: Assuming cloudevent-plugin is running as described in previous setup.
 
 You can test the plugin and request the `/` endpoint, e.g. with:
 ```bash

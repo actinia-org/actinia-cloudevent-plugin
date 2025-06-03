@@ -20,6 +20,6 @@ fi
 
 TEST_RES=$?
 
-# TODO!: stop cloud event receiver server
+# TODO: stop cloud event receiver server
 
 return $TEST_RES
