@@ -44,7 +44,7 @@ class LOGCONFIG:
     """Default config for logging."""
 
     logfile = "actinia-cloudevent-plugin.log"
-    level = "DEBUG"
+    level = "INFO"
     type = "stdout"
 
 
