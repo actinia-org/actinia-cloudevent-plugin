@@ -1,4 +1,4 @@
-FROM alpine:3.21
+FROM alpine:3.22
 
 # python3 + pip3
 # hadolint ignore=DL3018
