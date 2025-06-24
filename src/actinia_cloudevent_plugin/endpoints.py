@@ -18,58 +18,46 @@ Add endpoints to flask app with endpoint definitions and routes
 """
 
 __license__ = "GPLv3"
-__author__ = "Carmen Tawalika, Anika Weinmann"
+__author__ = "Carmen Tawalika, Anika Weinmann, Lina Krisztian"
 __copyright__ = "Copyright 2022-2024 mundialis GmbH & Co. KG"
 __maintainer__ = "mundialis GmbH & Co. KG"
 
-from flask_restful_swagger_2 import Api, Resource
 
-from actinia_cloudevent_plugin.api.helloworld import HelloWorld
-from actinia_cloudevent_plugin.api.project_helloworld import ProjectHelloWorld
+import sys
 
+import werkzeug
+from flask import current_app, send_from_directory
+from flask_restful_swagger_2 import Api
 
-def get_endpoint_class_name(
-    endpoint_class: Resource,
-    projects_url_part: str = "projects",
-) -> str:
-    """Create the name for the given endpoint class."""
-    endpoint_class_name = endpoint_class.__name__.lower()
-    if projects_url_part != "projects":
-        name = f"{endpoint_class_name}_{projects_url_part}"
-    else:
-        name = endpoint_class_name
-    return name
-
-
-def create_project_endpoints(
-    apidoc: Api,
-    projects_url_part: str = "projects",
-) -> None:
-    """Add resources with "project" inside the endpoint url to the api.
-
-    Args:
-        apidoc (Api): Flask api
-        projects_url_part (str): The name of the projects inside the endpoint
-                                 URL; to add deprecated location endpoints set
-                                 it to "locations"
-
-    """
-    apidoc.add_resource(
-        ProjectHelloWorld,
-        f"/helloworld/{projects_url_part}/<string:project_name>",
-        endpoint=get_endpoint_class_name(ProjectHelloWorld, projects_url_part),
-    )
+from actinia_cloudevent_plugin.api.cloudevent import Cloudevent
+from actinia_cloudevent_plugin.resources.logging import log
 
 
 # endpoints loaded if run as actinia-core plugin as well as standalone app
 def create_endpoints(flask_api: Api) -> None:
     """Create plugin endpoints."""
+    app = flask_api.app
     apidoc = flask_api
 
-    apidoc.add_resource(HelloWorld, "/helloworld")
+    package = sys._getframe().f_back.f_globals["__package__"]  # noqa: SLF001
+    if package != "actinia_core":
 
-    # add deprecated location endpoints
-    create_project_endpoints(apidoc, projects_url_part="locations")
+        @app.route("/")
+        def index():
+            try:
+                return current_app.send_static_file("index.html")
+            except werkzeug.exceptions.NotFound:
+                log.debug("No index.html found. Serving backup.")
+                # when actinia-cloudevent-plugin is installed in single mode,
+                # the swagger endpoint would be "latest/api/swagger.json".
+                # As api docs exist in single mode,
+                # use this fallback for plugin mode.
+                return """<h1 style='color:red'>actinia-metadata-plugin</h1>
+                    <a href="api/v1/swagger.json">API docs</a>"""
 
-    # add project endpoints
-    create_project_endpoints(apidoc, projects_url_part="projects")
+        @app.route("/<path:filename>")
+        def static_content(filename):
+            # WARNING: all content from folder "static" will be accessible!
+            return send_from_directory(app.static_folder, filename)
+
+    apidoc.add_resource(Cloudevent, "/")

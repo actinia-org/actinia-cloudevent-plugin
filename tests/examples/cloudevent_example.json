@@ -1,0 +1,20 @@
+{
+    "id":"e3525c6d-bbd8-404d-9fa3-1e421dc99c11",
+    "specversion":"1.0",
+    "source" : "/apps/ui",
+    "type":"com.mundialis.actinia.process.send",
+    "time":"2025-03-28T10:28:48Z",
+    "subject" : "nc_spm_08/PERMANENT",
+    "datacontenttype":"application/json",
+    "data":{
+      "list": [
+        {
+          "module": "r.slope.aspect",
+          "inputs": [{
+              "param": "elevation",
+              "value": "elev_ned_30m@PERMANENT"
+            }]
+        }
+      ]
+    }
+}

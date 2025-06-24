@@ -1,0 +1,12 @@
+{
+    "id":"1132f3c5-bcec-4947-b676-1da32279316d",
+    "specversion":"1.0",
+    "source" : "/actinia-cloudevent-plugin",
+    "type":"com.mundialis.actinia.process.started",
+    "time":"2025-03-28T10:30:48Z",
+    "subject" : "nc_spm_08/PERMANENT",
+    "datacontenttype":"application/json",
+    "data":{
+      "actinia_status_url": "todo, if needed"
+    }
+}

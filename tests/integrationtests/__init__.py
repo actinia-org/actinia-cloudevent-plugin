@@ -1,5 +1,5 @@
-"""Integration tests of the actinia-example-plguin.
+"""Integration tests of the actinia-cloudevent-plguin.
 
-This package part provides the integration tests of the
-actinia-cloudevent-plugin.
+This package part provides the integration tests
+of the actinia-cloudevent-plugin.
 """
