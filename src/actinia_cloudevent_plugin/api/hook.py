@@ -23,10 +23,10 @@ __copyright__ = "Copyright 2025 mundialis GmbH & Co. KG"
 __maintainer__ = "mundialis GmbH & Co. KG"
 
 import json
-import requests
 
-from cloudevents.http import CloudEvent
+import requests
 from cloudevents.conversion import to_binary
+from cloudevents.http import CloudEvent
 from flask import jsonify, make_response, request
 from flask_restful_swagger_2 import Resource, swagger
 
@@ -42,6 +42,7 @@ class Hook(Resource):
 
     def get(self, source_name):
         """Cloudevent get method: not allowed response."""
+        _source_name = source_name
         res = jsonify(
             SimpleStatusCodeResponseModel(
                 status=405,
@@ -51,7 +52,9 @@ class Hook(Resource):
         return make_response(res, 405)
 
     def head(self, source_name):
-        return make_response('', 200)
+        """Cloudevent head method: return empty response."""
+        _source_name = source_name
+        return make_response("", 200)
 
     @swagger.doc(hook.describe_hook_post_docs)
     def post(self, source_name) -> SimpleStatusCodeResponseModel:
@@ -59,40 +62,43 @@ class Hook(Resource):
 
         This method is called by HTTP POST actinia-core webhook
         """
-
         # only actinia as source supported so far
-        if source_name != 'actinia':
+        if source_name != "actinia":
             return make_response(
-                jsonify(SimpleStatusCodeResponseModel(
-                    status=400,
-                    message='Bad Request: Source name does not match actinia'
-                )),
-                400
+                jsonify(
+                    SimpleStatusCodeResponseModel(
+                        status=400,
+                        message="Bad Request: Source name not 'actinia'",
+                    ),
+                ),
+                400,
             )
 
         postbody = request.get_json(force=True)
 
         if type(postbody) is dict:
             postbody = json.dumps(postbody)
-        elif type(postbody) != 'str':
+        elif not isinstance(postbody, str):
             postbody = str(postbody)
 
         resp = json.loads(postbody)
-        if 'resource_id' not in resp:
+        if "resource_id" not in resp:
             return make_response(
-                jsonify(SimpleStatusCodeResponseModel(
-                    status=400,
-                    message='Bad Request: No resource_id found in request'
-                )),
-                400
+                jsonify(
+                    SimpleStatusCodeResponseModel(
+                        status=400,
+                        message="Bad Request: No resource_id found in request",
+                    ),
+                ),
+                400,
             )
 
         # TODO: define when to send cloudevent
-        status = resp['status']
-        if status == 'finished':
+        status = resp["status"]
+        if status == "finished":
             # TODO send cloudevent
             pass
-        terminate_status = ['finished', 'error', 'terminated']
+        terminate_status = ["finished", "error", "terminated"]
         if status in terminate_status:
             # TODO send cloudevent
             pass

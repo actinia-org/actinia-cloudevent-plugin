@@ -31,7 +31,8 @@ describe_hooks_post_docs = {
     # "summary" is taken from the description of the get method
     "tags": ["cloudevent"],
     "description": (
-        "Receives webhook with status update e.g. from actinia-core, transforms to cloudevent and sends it to configurable endpoint."
+        "Receives webhook with status update e.g. from actinia-core,"
+        " transforms to cloudevent and sends it to configurable endpoint."
     ),
     "responses": {
         "200": {
