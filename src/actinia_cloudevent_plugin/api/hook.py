@@ -23,20 +23,24 @@ __copyright__ = "Copyright 2025 mundialis GmbH & Co. KG"
 __maintainer__ = "mundialis GmbH & Co. KG"
 
 import json
+import requests
 
+from cloudevents.http import CloudEvent
+from cloudevents.conversion import to_binary
 from flask import jsonify, make_response, request
 from flask_restful_swagger_2 import Resource, swagger
 
-# from actinia_cloudevent_plugin.apidocs import webhook
+from actinia_cloudevent_plugin.apidocs import hook
 from actinia_cloudevent_plugin.model.response_models import (
     SimpleStatusCodeResponseModel,
 )
+from actinia_cloudevent_plugin.resources.config import EVENTRECEIVER
 
 
 class Hook(Resource):
     """Webhook handling."""
 
-    def get(self):
+    def get(self, source_name):
         """Cloudevent get method: not allowed response."""
         res = jsonify(
             SimpleStatusCodeResponseModel(
@@ -46,12 +50,25 @@ class Hook(Resource):
         )
         return make_response(res, 405)
 
-    # @swagger.doc(cloudevent.describe_cloudevent_post_docs)
-    def post(self) -> SimpleStatusCodeResponseModel:
+    def head(self, source_name):
+        return make_response('', 200)
+
+    @swagger.doc(hook.describe_hook_post_docs)
+    def post(self, source_name) -> SimpleStatusCodeResponseModel:
         """Translate actinia webhook call to cloudevent.
 
         This method is called by HTTP POST actinia-core webhook
         """
+
+        # only actinia as source supported so far
+        if source_name != 'actinia':
+            return make_response(
+                jsonify(SimpleStatusCodeResponseModel(
+                    status=400,
+                    message='Bad Request: Source name does not match actinia'
+                )),
+                400
+            )
 
         postbody = request.get_json(force=True)
 
@@ -70,19 +87,39 @@ class Hook(Resource):
                 400
             )
 
-        # identify actinia as source
-        resourceID = resp['resource_id']
-        status = resp['status']
-
         # TODO: define when to send cloudevent
-
+        status = resp['status']
         if status == 'finished':
             # TODO send cloudevent
             pass
-
         terminate_status = ['finished', 'error', 'terminated']
         if status in terminate_status:
             # TODO send cloudevent
             pass
 
-        return make_response(jsonify(resourceID, status), 200)
+        # TODO: move to common function from core.cloudevents
+        url = EVENTRECEIVER.url
+        try:
+            attributes = {
+                "specversion": "1.0",
+                "source": "/actinia-cloudevent-plugin",
+                "type": "com.mundialis.actinia.process.status",
+                "subject": "nc_spm_08/PERMANENT",
+                "datacontenttype": "application/json",
+            }
+            data = {"actinia_job": resp}
+            event = CloudEvent(attributes, data)
+            headers, body = to_binary(event)
+            requests.post(url, headers=headers, data=body)
+        except ConnectionError as e:
+            return f"Connection ERROR when returning cloudevent: {e}"
+        except Exception() as e:
+            return f"ERROR when returning cloudevent: {e}"
+
+        res = jsonify(
+            SimpleStatusCodeResponseModel(
+                status=200,
+                message="Thank you for your update",
+            ),
+        )
+        return make_response(res, 200)

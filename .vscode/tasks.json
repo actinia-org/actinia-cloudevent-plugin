@@ -48,7 +48,7 @@
 					"FLASK_DEBUG": "1",
 					"FLASK_ENV": "development",
 				},
-				"customOptions": "--ip 172.18.0.11",
+				"customOptions": "--ip 172.18.0.12",
 				"volumes": [
 					// mount local source code for instant reload
 					// on changes
