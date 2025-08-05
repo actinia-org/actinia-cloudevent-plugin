@@ -23,41 +23,15 @@ __copyright__ = "Copyright 2022-2024 mundialis GmbH & Co. KG"
 __maintainer__ = "mundialis GmbH & Co. KG"
 
 
-import sys
-
-import werkzeug
-from flask import current_app, send_from_directory
 from flask_restful_swagger_2 import Api
 
 from actinia_cloudevent_plugin.api.cloudevent import Cloudevent
-from actinia_cloudevent_plugin.resources.logging import log
+from actinia_cloudevent_plugin.api.hook import Hook
 
 
 # endpoints loaded if run as actinia-core plugin as well as standalone app
 def create_endpoints(flask_api: Api) -> None:
     """Create plugin endpoints."""
-    app = flask_api.app
     apidoc = flask_api
-
-    package = sys._getframe().f_back.f_globals["__package__"]  # noqa: SLF001
-    if package != "actinia_core":
-
-        @app.route("/")
-        def index():
-            try:
-                return current_app.send_static_file("index.html")
-            except werkzeug.exceptions.NotFound:
-                log.debug("No index.html found. Serving backup.")
-                # when actinia-cloudevent-plugin is installed in single mode,
-                # the swagger endpoint would be "latest/api/swagger.json".
-                # As api docs exist in single mode,
-                # use this fallback for plugin mode.
-                return """<h1 style='color:red'>actinia-metadata-plugin</h1>
-                    <a href="api/v1/swagger.json">API docs</a>"""
-
-        @app.route("/<path:filename>")
-        def static_content(filename):
-            # WARNING: all content from folder "static" will be accessible!
-            return send_from_directory(app.static_folder, filename)
-
     apidoc.add_resource(Cloudevent, "/")
+    apidoc.add_resource(Hook, "/hooks/<string:source_name>")
