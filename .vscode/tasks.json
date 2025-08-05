@@ -1,0 +1,64 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "docker-build",
+			"label": "docker-build",
+			"platform": "python",
+			"dockerBuild": {
+				"tag": "actinia-cloudevent-plugin:latest",
+				"dockerfile": "${workspaceFolder}/docker/Dockerfile",
+				"context": "${workspaceFolder}"
+				// "pull": true // use this when an newer image is available
+			}
+		},
+		{
+			"type": "docker-run",
+			"label": "docker-run: debug",
+			"dependsOn": [
+				"docker-build",
+			],
+			"python": {
+				"module": "flask",
+				"args": [
+					"run",
+					"--no-debugger",
+					// "--no-reload",
+					"--host",
+					"0.0.0.0",
+					"--port",
+					"3003"
+				]
+			},
+			"dockerRun": {
+				"remove": true,
+				// network is needed when connecting to valkey
+				// while not using docker-compose for startup
+				"network": "actinia-docker_actinia-dev",
+				"ports": [
+					{
+						"containerPort": 3003,
+						"hostPort": 3003
+					}
+				],
+				"env": {
+					"PYTHONUNBUFFERED": "1",
+					"PYTHONDONWRITEBYTECODE": "1",
+					"FLASK_APP": "actinia_cloudevent_plugin.main",
+					"FLASK_DEBUG": "1",
+					"FLASK_ENV": "development",
+				},
+				"customOptions": "--ip 172.18.0.11",
+				"volumes": [
+					// mount local source code for instant reload
+					// on changes
+					{
+						"localPath": "${workspaceFolder}",
+						"containerPath": "/src/actinia-cloudevent-plugin",
+						"permissions": "rw"
+					}
+				]
+			}
+		}
+	]
+}

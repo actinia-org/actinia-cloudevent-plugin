@@ -25,7 +25,7 @@ __maintainer__ = "mundialis GmbH & Co. KG"
 import json
 
 from flask import jsonify, make_response, request
-# from flask_restful_swagger_2 import Resource, swagger
+from flask_restful_swagger_2 import Resource, swagger
 
 # from actinia_cloudevent_plugin.apidocs import webhook
 from actinia_cloudevent_plugin.model.response_models import (
