@@ -23,10 +23,15 @@ __copyright__ = "Copyright 2025 mundialis GmbH & Co. KG"
 __maintainer__ = "mundialis GmbH & Co. KG"
 
 
+import json
+
 import requests
 from cloudevents.conversion import to_binary, to_structured
 from cloudevents.http import CloudEvent, from_http
 from flask import request
+from requests.auth import HTTPBasicAuth
+
+from actinia_cloudevent_plugin.resources.config import ACTINIA, EVENTRECEIVER
 
 
 def receive_cloud_event():
@@ -43,64 +48,120 @@ def receive_cloud_event():
     return event
 
 
-def cloud_event_to_process_chain(event) -> str:
+def start_actinia_job(event) -> str:
     """Return queue name for process chain of event."""
-    # (Remove ruff-exception, when pc variable used)
-    pc = event.get_data()["list"][0]  # noqa: F841
-    # !! TODO !!: pc to job
+    pc = event.get_data()
     # NOTE: as standalone app -> consider for queue name creation
-    # HTTP POST pc to actinia-module plugin processing endpoint
-    # # # include an identifier for grouping cloudevents of same actinia process (?)
-    # # # (e.g. new metadata field "queue_name", or within data, or use existign id)
-    # -> actinia core returns resource-url, including resource_id  (and queue name)
-    #   (queuename = xx_<resource_id>; if configured accordingly within actinia -> each job own queue)
-    # via knative jobsink: start actinia worker (with queue name)
-    # (https://knative.dev/docs/eventing/sinks/job-sink/#usage)
-    # e.g. HTTP POST with queue name
-    # kubectl run curl --image=curlimages/curl --rm=true --restart=Never -ti -- -X POST -v \
-    #    -H "content-type: application/json"  \
-    #    -H "ce-specversion: 1.0" \
-    #    -H "ce-source: my/curl/command" \
-    #    -H "ce-type: my.demo.event" \
-    #    -H "ce-id: 123" \
-    #    -d '{"details":"queuename"}' \
-    #    http://job-sink.knative-eventing.svc.cluster.local/default/job-sink-logger
-    return "<queue_name>_<resource_id>"  # queue name and resource id
+
+    # TODO: Define ce attribute for possible mapset.
+    # Also in actiniaproject divided by "/" or "."?
+    project = event.get_attributes().get("actiniaproject")
+    mapset = None
+    if "." in project:
+        project = project.split(".")[0]
+        mapset = project.split(".")[1]
+
+    url = f"{ACTINIA.processing_base_url}/projects/{project}/"
+    if not mapset:
+        # emphemeral processing
+        if ACTINIA.use_actinia_modules:
+            url += "processing_export"
+        else:
+            url += "processing_async_export"
+    # persistent processing
+    elif ACTINIA.use_actinia_modules:
+        url += f"mapsets/{mapset}/processing"
+    else:
+        url += f"mapsets/{mapset}/processing_async/"
+
+    postkwargs = dict()
+    postkwargs["headers"] = {"content-type": "application/json; charset=utf-8"}
+    postkwargs["auth"] = HTTPBasicAuth(ACTINIA.user, ACTINIA.password)
+    postkwargs["data"] = json.dumps(pc)
+
+    resp = requests.post(
+        url,
+        **postkwargs,
+    )
+
+    # TODO: return more information?
+    # 'message' = 'Resource accepted'
+    # 'queue' = 'job_queue_resource_id-cddae7bb-b4fa-4249-aec4-2a646946ff36'
+    # 'resource_id' = 'resource_id-cddae7bb-b4fa-4249-aec4-2a646946ff36'
+    # 'status' = 'accepted'
+    # 'urls' = {
+    #    'resources': [],
+    #    'status':
+    #    'http://actinia-dev:8088/api/v3/resources/actinia-gdi/
+    #    resource_id-cddae7bb-b4fa-4249-aec4-2a646946ff36'}
+
+    return json.loads(resp.text)["queue"]
 
 
-def send_binary_cloud_event(event, actinia_job, url):
+def send_binary_cloud_event(event, queue_name, url):
     """Return posted binary event with actinia_job."""
-    attributes = {
-        "specversion": event["specversion"],
-        "source": "/actinia-cloudevent-plugin",
-        "type": "com.mundialis.actinia.process.started",
-        "subject": event["subject"],
-        "datacontenttype": "application/json",
-    }
-    data = {"actinia_job": actinia_job}
-
-    event = CloudEvent(attributes, data)
-    headers, body = to_binary(event)
-    # send event
-    requests.post(url, headers=headers, data=body)
-
-    return event
+    return send_cloud_event(
+        mode="binary",
+        version=event["specversion"],
+        type="com.mundialis.actinia.process.startworker",
+        subject=event["subject"],
+        actiniaqueuename=queue_name,
+        url=url,
+    )
 
 
 def send_structured_cloud_event(event, actinia_job, url):
     """Return posted structured event with actinia_job."""
+    # TODO: adjust to queue name
+    return send_cloud_event(
+        mode="structured",
+        version=event["specversion"],
+        type="com.mundialis.actinia.process.started",
+        subject=event["subject"],
+        data={"actinia_job": actinia_job},
+        url=url,
+    )
+
+
+def send_cloud_event(
+    mode="binary",
+    version="1.0",
+    cetype="com.mundialis.actinia.process.started",
+    subject="nc_spm_08/PERMANENT",
+    data="{}",
+    url=None,
+):
+    """Post event and return it."""
+    if url is None:
+        url = EVENTRECEIVER.url
+
     attributes = {
-        "specversion": event["specversion"],
+        "specversion": version,
         "source": "/actinia-cloudevent-plugin",
-        "type": "com.mundialis.actinia.process.started",
-        "subject": event["subject"],
+        "type": cetype,
+        "subject": subject,
         "datacontenttype": "application/json",
     }
-    data = {"actinia_job": actinia_job}
 
     event = CloudEvent(attributes, data)
-    headers, body = to_structured(event)
-    # send event
+
+    # From https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#message
+    # A "structured-mode message" is one where the entire event (attributes and data)
+    # are encoded in the message body, according to a specific event format.
+    # A "binary-mode message" is one where the event data is stored in the message body,
+    # and event attributes are stored as part of message metadata.
+    # Often, binary mode is used when the producer of the CloudEvent wishes to add the
+    # CloudEvent's metadata to an existing event without impacting the message's body.
+    # In most cases a CloudEvent encoded as a binary-mode message will not break an
+    # existing receiver's processing of the event because the message's metadata
+    # typically allows for extension attributes.
+    # In other words, a binary formatted CloudEvent would work for both
+    # a CloudEvents enabled receiver as well as one that is unaware of CloudEvents.
+    if mode == "binary":
+        headers, body = to_binary(event)
+    else:
+        headers, body = to_structured(event)
+
     requests.post(url, headers=headers, data=body)
 
     return event
