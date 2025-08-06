@@ -69,7 +69,7 @@ class CloudeventTest(TestCase):
 
         # Test post method
         resp = self.app.post(
-            f"{self.URL_PREFIX}/",
+            "/",
             data=json.dumps(cloudevent_json),
             content_type="application/json",
         )
@@ -100,7 +100,7 @@ class CloudeventTest(TestCase):
     @pytest.mark.integrationtest
     def test_get_cloudevent(self) -> None:
         """Test the get method of the / endpoint."""
-        resp = self.app.get(f"{self.URL_PREFIX}/")
+        resp = self.app.get("/")
         assert isinstance(
             resp,
             Response,
