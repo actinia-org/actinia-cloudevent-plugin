@@ -10,4 +10,5 @@ per-file-ignores =
     ./tests/cloudevent_receiver_server.py: E501
     # remove when implemented:
     ./src/actinia_cloudevent_plugin/api/cloudevent.py: E501
-    ./src/actinia_cloudevent_plugin/core/processing.py: F841, E501
+    ./src/actinia_cloudevent_plugin/api/hooks.py: F841
+    ./src/actinia_cloudevent_plugin/core/cloudevents.py: F841, E501

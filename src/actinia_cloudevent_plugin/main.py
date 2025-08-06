@@ -42,7 +42,7 @@ URL_PREFIX = f"/api/{API_VERSION}"
 apidoc = Api(
     flask_app,
     title="actinia-cloudevent-plugin",
-    prefix=URL_PREFIX,
+    # prefix=URL_PREFIX,
     api_version=API_VERSION,
     api_spec_url=f"{URL_PREFIX}/swagger",
     schemes=["https", "http"],
@@ -53,8 +53,7 @@ apidoc = Api(
                    """,
 )
 
-create_endpoints(apidoc)
-
+create_endpoints(flask_api=apidoc)
 
 if __name__ == "__main__":
     # call this for development only with:

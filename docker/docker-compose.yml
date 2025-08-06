@@ -11,4 +11,4 @@ services:
       - SYS_PTRACE
     ports:
       - "5000:5000"
-    network_mode: "host"
+    # network_mode: "host"

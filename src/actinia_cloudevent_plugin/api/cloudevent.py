@@ -27,7 +27,7 @@ from flask_restful_swagger_2 import Resource, swagger
 from requests.exceptions import ConnectionError  # noqa: A004
 
 from actinia_cloudevent_plugin.apidocs import cloudevent
-from actinia_cloudevent_plugin.core.processing import (
+from actinia_cloudevent_plugin.core.cloudevents import (
     cloud_event_to_process_chain,
     receive_cloud_event,
     send_binary_cloud_event,
