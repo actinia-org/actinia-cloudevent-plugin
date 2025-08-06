@@ -30,14 +30,14 @@ from cloudevents.http import CloudEvent
 from flask import jsonify, make_response, request
 from flask_restful_swagger_2 import Resource, swagger
 
-from actinia_cloudevent_plugin.apidocs import hook
+from actinia_cloudevent_plugin.apidocs import hooks
 from actinia_cloudevent_plugin.model.response_models import (
     SimpleStatusCodeResponseModel,
 )
 from actinia_cloudevent_plugin.resources.config import EVENTRECEIVER
 
 
-class Hook(Resource):
+class Hooks(Resource):
     """Webhook handling."""
 
     def get(self, source_name):
@@ -56,7 +56,7 @@ class Hook(Resource):
         _source_name = source_name
         return make_response("", 200)
 
-    @swagger.doc(hook.describe_hook_post_docs)
+    @swagger.doc(hooks.describe_hooks_post_docs)
     def post(self, source_name) -> SimpleStatusCodeResponseModel:
         """Translate actinia webhook call to cloudevent.
 
