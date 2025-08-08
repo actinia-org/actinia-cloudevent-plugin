@@ -49,7 +49,7 @@ def receive_cloud_event():
 
 
 def start_actinia_job(event) -> str:
-    """Return queue name for process chain of event."""
+    """Return actinia response for process chain of event."""
     pc = event.get_data()
     # NOTE: as standalone app -> consider for queue name creation
 
@@ -84,7 +84,7 @@ def start_actinia_job(event) -> str:
         **postkwargs,
     )
 
-    # TODO: return more information?
+    # Part of resp:
     # 'message' = 'Resource accepted'
     # 'queue' = 'job_queue_resource_id-cddae7bb-b4fa-4249-aec4-2a646946ff36'
     # 'resource_id' = 'resource_id-cddae7bb-b4fa-4249-aec4-2a646946ff36'
@@ -95,7 +95,7 @@ def start_actinia_job(event) -> str:
     #    'http://actinia-dev:8088/api/v3/resources/actinia-gdi/
     #    resource_id-cddae7bb-b4fa-4249-aec4-2a646946ff36'}
 
-    return json.loads(resp.text)["queue"]
+    return json.loads(resp.text)
 
 
 def send_binary_cloud_event(event, queue_name, url):
@@ -103,7 +103,7 @@ def send_binary_cloud_event(event, queue_name, url):
     return send_cloud_event(
         mode="binary",
         version=event["specversion"],
-        type="com.mundialis.actinia.process.startworker",
+        cetype="com.mundialis.actinia.process.startworker",
         subject=event["subject"],
         actiniaqueuename=queue_name,
         url=url,
@@ -116,7 +116,7 @@ def send_structured_cloud_event(event, actinia_job, url):
     return send_cloud_event(
         mode="structured",
         version=event["specversion"],
-        type="com.mundialis.actinia.process.started",
+        cetype="com.mundialis.actinia.process.started",
         subject=event["subject"],
         data={"actinia_job": actinia_job},
         url=url,
@@ -128,6 +128,7 @@ def send_cloud_event(
     version="1.0",
     cetype="com.mundialis.actinia.process.started",
     subject="nc_spm_08/PERMANENT",
+    actiniaqueuename=None,
     data="{}",
     url=None,
 ):
@@ -141,6 +142,7 @@ def send_cloud_event(
         "type": cetype,
         "subject": subject,
         "datacontenttype": "application/json",
+        "actiniaqueuename": actiniaqueuename,
     }
 
     event = CloudEvent(attributes, data)

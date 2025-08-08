@@ -70,14 +70,25 @@ class Cloudevent(Resource):
         # Transform postbody to cloudevent
         event_received = receive_cloud_event()
         # With received process chain start actinia process + return cloudevent
-        queue_name = start_actinia_job(event_received)
-        # URL to which the generated cloudevent is sent
-        url = EVENTRECEIVER.url
+        actinia_resp = start_actinia_job(event_received)
+        queue_name = actinia_resp["queue"]
+
         try:
+            # TODO: Send event to JobSink
+            # TODO: Configure JobSink URL
+            # url = TODO
+            # new_event = send_binary_cloud_event(
+            #     event_received,
+            #     queue_name,
+            #     url,
+            # )
+
+            # Send event to configured broker
             # TODO: binary or structured cloud event?
+            url = EVENTRECEIVER.url
             new_event = send_binary_cloud_event(
                 event_received,
-                queue_name,
+                actinia_resp,
                 url,
             )
             return SimpleStatusCodeResponseModel(
