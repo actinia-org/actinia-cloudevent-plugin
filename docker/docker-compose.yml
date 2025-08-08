@@ -12,3 +12,17 @@ services:
     ports:
       - "5000:5000"
     # network_mode: "host"
+
+  actinia-core:
+    image: mundialis/actinia:2.12.1
+    depends_on:
+      - valkey
+
+  valkey:
+    image: valkey/valkey:8.1-alpine
+    command: [
+      "sh",
+      "-c",
+      'docker-entrypoint.sh
+      --requirepass pass'
+    ]
