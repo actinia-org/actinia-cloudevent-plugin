@@ -45,6 +45,6 @@ jobs:
     - name: Docker logs actinia-core
       run: docker logs docker-actinia-core-1
     - name: Run integration test
-      run: docker exec -t docker-actinia-cloudevent-1 sh make integrationtest
+      run: docker exec -t docker-actinia-cloudevent-1 make integrationtest
     - name: Stop containers
       run: docker compose -f "docker/docker-compose.yml" down
