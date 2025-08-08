@@ -32,9 +32,9 @@ cloudevent_json = {
     "source": "/apps/ui",
     "type": "com.mundialis.actinia.process.send",
     "time": "2025-03-28T10:28:48Z",
-    "subject" : "myid",
-    "actiniaproject":"nc_spm_08",
-    "actiniaqueuename":"",
+    "subject": "myid",
+    "actiniaproject": "nc_spm_08",
+    "actiniaqueuename": "",
     "datacontenttype": "application/json",
     "data": {
         "list": [
