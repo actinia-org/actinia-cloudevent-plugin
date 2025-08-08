@@ -34,6 +34,15 @@ CONFIG_FILES = [
 GENERATED_CONFIG = DEFAULT_CONFIG_PATH + "/actinia-cloudevent-plugin.cfg"
 
 
+class ACTINIA:
+    """Default config for actinia processing."""
+
+    processing_base_url = "http://localhost:3000/"
+    use_actinia_modules = True
+    user = "actinia-gdi"
+    password = "actinia-gdi"
+
+
 class EVENTRECEIVER:
     """Default config for cloudevent receiver."""
 
@@ -72,6 +81,23 @@ class Configfile:
         ) as configfile:
             config.write(configfile)
         print("Configuration written to " + GENERATED_CONFIG)
+
+        # ACTINIA
+        if config.has_section("ACTINIA"):
+            if config.has_option("ACTINIA", "processing_base_url"):
+                ACTINIA.processing_base_url = config.get(
+                    "ACTINIA",
+                    "processing_base_url",
+                )
+            if config.has_option("ACTINIA", "use_actinia_modules"):
+                ACTINIA.use_actinia_modules = config.getboolean(
+                    "ACTINIA",
+                    "use_actinia_modules",
+                )
+            if config.has_option("ACTINIA", "user"):
+                ACTINIA.user = config.get("ACTINIA", "user")
+            if config.has_option("ACTINIA", "password"):
+                ACTINIA.password = config.get("ACTINIA", "password")
 
         # LOGGING
         if config.has_section("LOGCONFIG"):

@@ -25,7 +25,7 @@ __maintainer__ = "mundialis GmbH & Co. KG"
 
 from flask_restful_swagger_2 import Api
 
-from actinia_cloudevent_plugin.api.cloudevent import Cloudevent
+from actinia_cloudevent_plugin.api.cloudevents import Cloudevent
 from actinia_cloudevent_plugin.api.hooks import Hooks
 
 

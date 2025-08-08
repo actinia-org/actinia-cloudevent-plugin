@@ -22,5 +22,5 @@ lint.ignore = ["ANN001", "ANN201", "ANN202", "E501", "FA102", "N802", "N816", "P
 [lint.per-file-ignores]
 "tests/testsuite.py" = [ "PLC0415",]
 "src/actinia_cloudevent_plugin/resources/logging.py" = ["A005",]
-"src/actinia_cloudevent_plugin/resources/config.py" = ["SIM102",]
+"src/actinia_cloudevent_plugin/resources/config.py" = ["SIM102","S105"]
 "tests/integrationtests/test_cloudevent.py" = ["PLR2004",]
