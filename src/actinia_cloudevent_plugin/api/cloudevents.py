@@ -28,10 +28,10 @@ from requests.exceptions import ConnectionError  # noqa: A004
 
 from actinia_cloudevent_plugin.apidocs import cloudevent
 from actinia_cloudevent_plugin.core.cloudevents import (
-    cloud_event_to_process_chain,
     receive_cloud_event,
     send_binary_cloud_event,
     # send_structured_cloud_event,
+    start_actinia_job,
 )
 from actinia_cloudevent_plugin.model.response_models import (
     SimpleStatusCodeResponseModel,
@@ -70,33 +70,32 @@ class Cloudevent(Resource):
         # Transform postbody to cloudevent
         event_received = receive_cloud_event()
         # With received process chain start actinia process + return cloudevent
-        actinia_job = cloud_event_to_process_chain(event_received)
-        # URL to which the generated cloudevent is sent
-        url = EVENTRECEIVER.url
-        # TODO: binary or structured cloud event?
-        # From https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#message
-        # A "structured-mode message" is one where the entire event (attributes and data)
-        # are encoded in the message body, according to a specific event format.
-        # A "binary-mode message" is one where the event data is stored in the message body,
-        # and event attributes are stored as part of message metadata.
-        # Often, binary mode is used when the producer of the CloudEvent wishes to add the
-        # CloudEvent's metadata to an existing event without impacting the message's body.
-        # In most cases a CloudEvent encoded as a binary-mode message will not break an
-        # existing receiver's processing of the event because the message's metadata
-        # typically allows for extension attributes.
-        # In other words, a binary formatted CloudEvent would work for both
-        # a CloudEvents enabled receiver as well as one that is unaware of CloudEvents.
+        actinia_resp = start_actinia_job(event_received)
+        queue_name = actinia_resp["queue"]
+
         try:
-            event_returned = send_binary_cloud_event(
+            # TODO: Send event to JobSink
+            # TODO: Configure JobSink URL
+            # url = TODO
+            # new_event = send_binary_cloud_event(
+            #     event_received,
+            #     queue_name,
+            #     url,
+            # )
+
+            # Send event to configured broker
+            # TODO: binary or structured cloud event?
+            url = EVENTRECEIVER.url
+            new_event = send_binary_cloud_event(
                 event_received,
-                actinia_job,
+                actinia_resp,
                 url,
             )
             return SimpleStatusCodeResponseModel(
                 status=204,
                 message=self.msg.replace("<EVENT1>", event_received["id"])
-                .replace("<EVENT2>", event_returned["id"])
-                .replace("<ACTINIA_JOB>", actinia_job),
+                .replace("<EVENT2>", new_event["id"])
+                .replace("<ACTINIA_JOB>", queue_name),
             )
         except ConnectionError as e:
             return f"Connection ERROR when returning cloudevent: {e}"

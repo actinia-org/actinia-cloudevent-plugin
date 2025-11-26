@@ -4,7 +4,9 @@
     "source" : "/actinia-cloudevent-plugin",
     "type":"com.mundialis.actinia.process.started",
     "time":"2025-03-28T10:30:48Z",
-    "subject" : "nc_spm_08/PERMANENT",
+    "subject" : "myid",
+    "actiniaproject":"nc_spm_08",
+    "actiniaqueuename":"",
     "datacontenttype":"application/json",
     "data":{
       "actinia_status_url": "todo, if needed"
