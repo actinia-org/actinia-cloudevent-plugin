@@ -28,7 +28,7 @@ from datetime import datetime, timezone
 from logging import FileHandler
 
 from colorlog import ColoredFormatter
-from pythonjsonlogger import jsonlogger
+from pythonjsonlogger import json
 
 from actinia_cloudevent_plugin.resources.config import LOGCONFIG
 
@@ -69,7 +69,7 @@ def set_log_handler(logger, logtype, logformat) -> None:
     logger.addHandler(handler)
 
 
-class CustomJsonFormatter(jsonlogger.JsonFormatter):
+class CustomJsonFormatter(json.JsonFormatter):
     """Customized formatting of logs as json."""
 
     def add_fields(self, log_record, record, message_dict) -> None:
