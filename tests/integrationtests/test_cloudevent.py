@@ -58,7 +58,11 @@ class CloudeventTest(TestCase):
         # Expected outcome
         # (Note: returned cloudevent id, changes for each request)
         # Lenght of response
-        resp_length = 152
+        resp_length_local_queue = 131
+        # resp_length of queue with kvdb differs: "local" vs e.g.
+        # "job_queue_resource_id-4263d323-829e-4a09-b3f3-6fbbfbd72a67"
+        # In this test setup currently only local queue is configured.
+        # resp_length_kvdb_queue = 152
         # Start of response (and according string index)
         resp_start = (
             "Received event e3525c6d-bbd8-404d-9fa3-1e421dc99c11"
@@ -66,7 +70,8 @@ class CloudeventTest(TestCase):
         )
         resp_start_ind = 71
         # End of response (and according string index)
-        resp_end = "with actinia-job <queue_name>_<resource_id>."
+        resp_end = "with actinia-job local."
+        # resp_end = "with actinia-job <queue_name>_<resource_id>."
         resp_end_ind = 108
 
         # Test post method
@@ -84,9 +89,10 @@ class CloudeventTest(TestCase):
         assert (
             "message" in resp.json
         ), "There is no 'message' inside the response"
-        assert len(resp.json["message"]) == resp_length, (
+        assert len(resp.json["message"]) == resp_length_local_queue, (
             "The length of response message is wrong. "
-            f"{len(resp.json['message'])}, instead of {resp_length}."
+            f"{len(resp.json['message'])}, "
+            f"instead of {resp_length_local_queue}."
         )
         assert resp.json["message"][:resp_start_ind] == resp_start, (
             "The start of response message is wrong. "
