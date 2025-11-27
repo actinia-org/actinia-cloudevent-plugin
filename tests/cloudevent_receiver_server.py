@@ -1,7 +1,13 @@
 #!/usr/bin/env python
-"""Helper script for generation server, which receives cloudevents."""
-# used from sdk-python
-# -> https://github.com/cloudevents/sdk-python/blob/main/samples/http-json-cloudevents/json_sample_server.py
+"""Helper script for generation server, which receives cloudevents.
+
+SPDX-FileCopyrightText: (c) 2025 by mundialis GmbH & Co. KG
+
+SPDX-License-Identifier: Apache-2.0
+
+code used from sdk-python
+-> https://github.com/cloudevents/sdk-python/blob/main/samples/http-json-cloudevents/json_sample_server.py
+"""
 
 from cloudevents.http import from_http
 from flask import Flask, request
