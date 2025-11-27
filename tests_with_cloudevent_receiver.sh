@@ -1,4 +1,21 @@
 #!/usr/bin/env sh
+########################################################################
+#
+# MODULE:       tests_with_cloudevent_receiver.sh
+#
+# AUTHOR(S):    Lina Krisztian
+#               mundialis GmbH & Co. KG, Bonn
+#               https://www.mundialis.de
+#
+# PURPOSE:      This script tests the cloudevent receiver
+#
+# SPDX-FileCopyrightText: (c) 2025 by mundialis GmbH & Co. KG
+#
+# REQUIREMENTS: sudo apt install valkey-server
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+########################################################################
 
 # start cloud event receiver server
 python3 tests/cloudevent_receiver_server.py &
