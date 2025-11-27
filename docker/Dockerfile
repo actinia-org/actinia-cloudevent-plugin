@@ -25,4 +25,4 @@ RUN pip3 install --no-cache-dir -e /src/actinia-cloudevent-plugin/ && \
 WORKDIR /src/actinia-cloudevent-plugin
 # RUN make test
 
-CMD ["gunicorn", "-b", "0.0.0.0:8088", "-w", "8", "--access-logfile=-", "-k", "gthread", "actinia_cloudevent_plugin.main:flask_app"]
+CMD ["gunicorn", "-b", "0.0.0.0:3003", "-w", "8", "--access-logfile=-", "-k", "gthread", "actinia_cloudevent_plugin.main:flask_app"]

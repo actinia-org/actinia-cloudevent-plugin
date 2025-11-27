@@ -77,7 +77,7 @@ class Cloudevent(Resource):
             url = EVENTRECEIVER.url
             new_event = send_binary_cloud_event(
                 event_received,
-                actinia_resp,
+                actinia_resp["queue"],
                 url,
             )
             return SimpleStatusCodeResponseModel(
@@ -88,5 +88,3 @@ class Cloudevent(Resource):
             )
         except ConnectionError as e:
             return f"Connection ERROR when returning cloudevent: {e}"
-        except Exception() as e:
-            return f"ERROR when returning cloudevent: {e}"
