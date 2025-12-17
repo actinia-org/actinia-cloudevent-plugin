@@ -79,8 +79,10 @@ class Cloudevent(Resource):
                 # Nothing to do here, the configured actinia-core
                 # instance is using a local queue, meaning that the
                 # job is processed directly.
-                log.info('No need to start actinia-worker',
-                         'actinia-core processes locally')
+                log.info(
+                    "No need to start actinia-worker",
+                    "actinia-core processes locally",
+                )
             else:
                 pass
                 # TODO: Send event to JobSink
