@@ -37,6 +37,7 @@ from actinia_cloudevent_plugin.model.response_models import (
     SimpleStatusCodeResponseModel,
 )
 from actinia_cloudevent_plugin.resources.config import EVENTRECEIVER
+from actinia_cloudevent_plugin.resources.logging import log
 
 
 class Cloudevent(Resource):
@@ -74,18 +75,26 @@ class Cloudevent(Resource):
         queue_name = actinia_resp["queue"]
 
         try:
-            # TODO: Send event to JobSink
-            # TODO: Configure JobSink URL
-            # url = TODO
-            # new_event = send_binary_cloud_event(
-            #     event_received,
-            #     queue_name,
-            #     url,
-            # )
+            if queue_name == "local":
+                # Nothing to do here, the configured actinia-core
+                # instance is using a local queue, meaning that the
+                # job is processed directly.
+                log.info('No need to start actinia-worker',
+                         'actinia-core processes locally')
+            else:
+                pass
+                # TODO: Send event to JobSink
+                # TODO: Configure JobSink URL
+                # url = TODO
+                # new_event = send_binary_cloud_event(
+                #     event_received,
+                #     queue_name,
+                #     url,
+                # )
 
             # Send event to configured broker
-            # TODO: binary or structured cloud event?
             url = EVENTRECEIVER.url
+            # TODO: binary or structured cloud event?
             new_event = send_binary_cloud_event(
                 event_received,
                 actinia_resp["queue"],
