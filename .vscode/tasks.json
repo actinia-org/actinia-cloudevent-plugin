@@ -15,7 +15,7 @@
 			"label": "start-cloudevent-receiver-dummy-server",
 			"type": "shell",
 			"command": "docker compose -f docker/docker-compose-vscode.yml up -d --build --force-recreate event-receiver-server",
-			"isBackground": true,
+			"isBackground": true
 		},
 		{
 			"type": "docker-run",

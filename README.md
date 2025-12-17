@@ -22,7 +22,7 @@ HTTP POST endpoints so far).
 Alternatively, configure actinia-core to run jobs via actinia-worker.
 In the actinia-core dev-setup, use the `per_job` queue in
 `actinia-docker/actinia-dev/actinia.cfg`:
-```
+```ini
 [QUEUE]
 # queue_type = local
 
