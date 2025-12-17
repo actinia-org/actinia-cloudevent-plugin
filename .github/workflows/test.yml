@@ -40,10 +40,12 @@ jobs:
       run: docker compose -f "docker/docker-compose.yml" up -d --build
     - name: List running docker
       run: docker ps
-    - name: Docker logs actinia-cloudevent
-      run: docker logs docker-actinia-cloudevent-1
-    - name: Docker logs actinia-core
-      run: docker logs docker-actinia-core-1
+    - name: Docker logs
+      run: |
+          sleep 10 && \
+          docker logs docker-actinia-cloudevent-1 && echo && \
+          docker logs docker-actinia-core-1 && echo && \
+          docker logs docker-event-receiver-server-1
     - name: Run integration test
       run: docker exec -t docker-actinia-cloudevent-1 make integrationtest
     - name: Stop containers
