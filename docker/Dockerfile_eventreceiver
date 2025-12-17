@@ -1,0 +1,17 @@
+FROM alpine:3.23
+
+# python3 + pip3
+# hadolint ignore=DL3018
+RUN apk update; \
+    apk add --no-cache python3 python3-dev make
+ENV PATH="/opt/venv/bin:$PATH"
+RUN /usr/bin/python -m venv --system-site-packages --without-pip /opt/venv
+# hadolint ignore=DL3013
+RUN python -m ensurepip && pip3 install --no-cache-dir --upgrade pip pep517 wheel
+
+RUN pip install --no-cache-dir cloudevents flask
+
+COPY tests/cloudevent_receiver_server.py /src/cloudevent_receiver_server.py
+
+WORKDIR /src
+CMD ["python", "/src/cloudevent_receiver_server.py"]

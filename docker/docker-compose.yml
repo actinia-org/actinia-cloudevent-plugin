@@ -11,7 +11,11 @@ services:
       - SYS_PTRACE
     ports:
       - "3003:3003"
-    # network_mode: "host"
+
+  event-receiver-server:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile_eventreceiver
 
   actinia-core:
     image: mundialis/actinia:2.12.2

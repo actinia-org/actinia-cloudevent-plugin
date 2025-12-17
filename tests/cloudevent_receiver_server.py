@@ -3,6 +3,7 @@
 # used from sdk-python
 # -> https://github.com/cloudevents/sdk-python/blob/main/samples/http-json-cloudevents/json_sample_server.py
 
+from cloudevents.exceptions import MissingRequiredFields
 from cloudevents.http import from_http
 from flask import Flask, request
 
@@ -13,7 +14,10 @@ app = Flask(__name__)
 def home():
     """Server for cloudevent receival."""
     # create a CloudEvent
-    event = from_http(request.headers, request.get_data())
+    try:
+        event = from_http(request.headers, request.get_data())
+    except MissingRequiredFields as e:
+        return f"ERROR parsing cloudevent: {e}", 400
 
     # you can access cloudevent fields as seen below
     print(
@@ -25,4 +29,4 @@ def home():
 
 
 if __name__ == "__main__":
-    app.run(port=3000)
+    app.run(port=3000, host="0.0.0.0")
