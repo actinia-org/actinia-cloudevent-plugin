@@ -27,6 +27,8 @@
 			"python": {
 				"module": "flask",
 				"args": [
+					"-e",
+					"/src/.env",
 					"run",
 					"--no-debugger",
 					"--host",

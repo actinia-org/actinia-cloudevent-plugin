@@ -27,6 +27,7 @@ from flask_restful_swagger_2 import Api
 
 from actinia_cloudevent_plugin.api.cloudevents import Cloudevent
 from actinia_cloudevent_plugin.api.hooks import Hooks
+from actinia_cloudevent_plugin.api.version import Version
 
 
 # endpoints loaded if run as actinia-core plugin as well as standalone app
@@ -35,3 +36,4 @@ def create_endpoints(flask_api: Api) -> None:
     apidoc = flask_api
     apidoc.add_resource(Cloudevent, "/")
     apidoc.add_resource(Hooks, "/hooks/<string:source_name>")
+    apidoc.add_resource(Version, "/version")

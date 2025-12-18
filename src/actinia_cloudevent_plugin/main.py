@@ -32,6 +32,8 @@ from actinia_cloudevent_plugin.resources.logging import log
 flask_app = Flask(__name__)
 # allows endpoints with and without trailing slashes
 flask_app.url_map.strict_slashes = False
+# setting, to keep order of sorted dictionary, passed to jsonify()
+flask_app.json.sort_keys = False
 CORS(flask_app)
 
 
