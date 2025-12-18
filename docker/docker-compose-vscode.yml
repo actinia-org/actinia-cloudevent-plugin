@@ -1,0 +1,14 @@
+services:
+  event-receiver-server:
+    container_name: event-receiver-server
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile_eventreceiver
+    ports:
+      - "3000:3000"
+    networks:
+      actinia-dev:
+
+networks:
+  actinia-dev:
+    name: actinia-docker_actinia-dev

@@ -12,10 +12,17 @@
 			}
 		},
 		{
+			"label": "start-cloudevent-receiver-dummy-server",
+			"type": "shell",
+			"command": "docker compose -f docker/docker-compose-vscode.yml up -d --build --force-recreate event-receiver-server",
+			"isBackground": true
+		},
+		{
 			"type": "docker-run",
 			"label": "docker-run: debug",
 			"dependsOn": [
-				"docker-build"
+				"docker-build",
+				"start-cloudevent-receiver-dummy-server"
 			],
 			"python": {
 				"module": "flask",
@@ -29,6 +36,7 @@
 				]
 			},
 			"dockerRun": {
+				"containerName": "actinia-cloudevent",
 				"remove": true,
 				"network": "actinia-docker_actinia-dev",
 				"ports": [

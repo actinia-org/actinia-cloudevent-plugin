@@ -26,7 +26,7 @@ GENERATED_CONFIG = DEFAULT_CONFIG_PATH + "/actinia-cloudevent-plugin.cfg"
 class ACTINIA:
     """Default config for actinia processing."""
 
-    processing_base_url = "http://localhost:3000/"
+    processing_base_url = "http://localhost:8088/"
     use_actinia_modules = True
     user = "actinia-gdi"
     password = "actinia-gdi"
