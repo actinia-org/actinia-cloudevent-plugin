@@ -15,12 +15,14 @@ RUN python -m ensurepip && pip3 install --no-cache-dir --upgrade pip pep517 whee
 # hadolint ignore=DL3013
 RUN pip3 install --no-cache-dir gunicorn && \
     # needed for tests
-    pip3 install --no-cache-dir setuptools pwgen==0.8.2.post0 pytest==8.3.5 pytest-cov==6.0.0
+    pip3 install --no-cache-dir setuptools pwgen==0.8.2.post0 pytest==8.3.5 pytest-cov==6.0.0 python-dotenv
 
 COPY . /src/actinia-cloudevent-plugin/
 RUN pip3 install --no-cache-dir -e /src/actinia-cloudevent-plugin/ && \
     # For tests:
     chmod a+x /src/actinia-cloudevent-plugin/tests_with_cloudevent_receiver.sh
+
+RUN echo "RUNNING_SINCE=`date`" > /src/.env
 
 WORKDIR /src/actinia-cloudevent-plugin
 # RUN make test
