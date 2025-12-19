@@ -50,7 +50,7 @@ def start_actinia_job(event) -> str:
         project = project.split(".")[0]
         mapset = project.split(".")[1]
 
-    url = f"{ACTINIA.processing_base_url}/projects/{project}/"
+    url = f"{ACTINIA.enqueue_job_base_url}/projects/{project}/"
     if not mapset:
         # emphemeral processing
         if ACTINIA.use_actinia_modules:

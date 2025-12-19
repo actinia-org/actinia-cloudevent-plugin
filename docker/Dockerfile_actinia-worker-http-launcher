@@ -1,0 +1,14 @@
+FROM alpine:3.23
+
+RUN apk update; \
+    apk add --no-cache python3 python3-dev make
+ENV PATH="/opt/venv/bin:$PATH"
+RUN /usr/bin/python -m venv --system-site-packages --without-pip /opt/venv
+RUN python -m ensurepip && pip3 install --no-cache-dir --upgrade pip
+
+RUN pip install --no-cache-dir --upgrade fastapi[standard] docker
+
+COPY tests/actinia_worker_http_launcher.py /src/app.py
+
+WORKDIR /src
+CMD ["fastapi", "run", "/src/app.py", "--port", "8000"]

@@ -18,11 +18,18 @@
 			"isBackground": true
 		},
 		{
+			"label": "start-actinia-worker-http-launcher",
+			"type": "shell",
+			"command": "docker compose -f docker/docker-compose-vscode.yml up -d --build --force-recreate actinia-worker-http-launcher",
+			"isBackground": true
+		},
+		{
 			"type": "docker-run",
 			"label": "docker-run: debug",
 			"dependsOn": [
 				"docker-build",
-				"start-cloudevent-receiver-dummy-server"
+				"start-cloudevent-receiver-dummy-server",
+				"start-actinia-worker-http-launcher"
 			],
 			"python": {
 				"module": "flask",

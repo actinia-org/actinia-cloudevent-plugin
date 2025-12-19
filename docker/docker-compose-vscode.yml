@@ -9,6 +9,18 @@ services:
     networks:
       actinia-dev:
 
+  actinia-worker-http-launcher:
+    container_name: actinia-worker-http-launcher
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile_actinia-worker-http-launcher
+    ports:
+      - "8000:8000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      actinia-dev:
+
 networks:
   actinia-dev:
     name: actinia-docker_actinia-dev

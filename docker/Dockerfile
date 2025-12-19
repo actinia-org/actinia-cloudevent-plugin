@@ -18,9 +18,7 @@ RUN pip3 install --no-cache-dir gunicorn && \
     pip3 install --no-cache-dir setuptools pwgen==0.8.2.post0 pytest==8.3.5 pytest-cov==6.0.0 python-dotenv
 
 COPY . /src/actinia-cloudevent-plugin/
-RUN pip3 install --no-cache-dir -e /src/actinia-cloudevent-plugin/ && \
-    # For tests:
-    chmod a+x /src/actinia-cloudevent-plugin/tests_with_cloudevent_receiver.sh
+RUN pip3 install --no-cache-dir -e /src/actinia-cloudevent-plugin/
 
 RUN echo "RUNNING_SINCE=`date`" > /src/.env
 
