@@ -23,7 +23,7 @@ services:
       dockerfile: docker/Dockerfile_eventreceiver
 
   actinia-core:
-    image: mundialis/actinia:2.12.2
+    image: mundialis/actinia:2.13.0
     depends_on:
       - valkey
 

@@ -7,6 +7,7 @@
 # N802 Function name should be lowercase
 # N816 Variable in global scope should not be mixedCas
 # PLC0415 import-outside-top-level
+# PLR0912 Too many branches (13 > 12)
 # PLR0913 too-many-arguments (of function definition)
 # PLR0917 too-many-positional-arguments (of function definition)
 # PLR2004 magic-value-comparison (unnamed numerical constants ("magic") values)
@@ -23,7 +24,7 @@ lint.ignore = ["ANN001", "ANN201", "ANN202", "E501", "FA102", "N802", "N816", "P
 [lint.per-file-ignores]
 "tests/testsuite.py" = [ "PLC0415",]
 "src/actinia_cloudevent_plugin/resources/logging.py" = ["A005",]
-"src/actinia_cloudevent_plugin/resources/config.py" = ["SIM102","S105"]
+"src/actinia_cloudevent_plugin/resources/config.py" = ["PLR0912", "SIM102","S105"]
 "tests/integrationtests/test_cloudevent.py" = ["PLR2004",]
 "tests/cloudevent_receiver_server.py" = ["S104"]
 "tests/integrationtests/test_hook.py" = ["PLR2004",]
