@@ -19,13 +19,13 @@ dist:
 	python3 setup.py dist
 
 test:
-	./tests_with_cloudevent_receiver.sh
+	pytest
 
 unittest:
-	./tests_with_cloudevent_receiver.sh unittest
+	pytest -m "unittest"
 
 devtest:
-	./tests_with_cloudevent_receiver.sh dev
+	pytest -m "dev"
 
 integrationtest:
-	./tests_with_cloudevent_receiver.sh integrationtest
+	pytest -m "integrationtest"

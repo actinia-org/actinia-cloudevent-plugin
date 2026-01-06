@@ -25,7 +25,7 @@ from actinia_cloudevent_plugin.core.cloudevents import (
 from actinia_cloudevent_plugin.model.response_models import (
     SimpleStatusCodeResponseModel,
 )
-from actinia_cloudevent_plugin.resources.config import EVENTRECEIVER
+from actinia_cloudevent_plugin.resources.config import ACTINIA, EVENTRECEIVER
 from actinia_cloudevent_plugin.resources.logging import log
 
 
@@ -62,6 +62,7 @@ class Cloudevent(Resource):
         # With received process chain start actinia process + return cloudevent
         actinia_resp = start_actinia_job(event_received)
         queue_name = actinia_resp["queue"]
+        resource_id = actinia_resp["resource_id"]
 
         try:
             if queue_name == "local":
@@ -70,15 +71,12 @@ class Cloudevent(Resource):
                 # job is processed directly.
                 log.info("No need to start actinia-worker")
             else:
-                pass
-                # TODO: Send event to JobSink
-                # TODO: Configure JobSink URL
-                # url = TODO
-                # new_event = send_binary_cloud_event(
-                #     event_received,
-                #     queue_name,
-                #     url,
-                # )
+                url = f"{ACTINIA.worker_http_launcher_url}/{queue_name}"
+                new_event = send_binary_cloud_event(
+                    event_received,
+                    queue_name,
+                    url,
+                )
 
             # Send event to configured broker
             url = EVENTRECEIVER.url
@@ -88,11 +86,15 @@ class Cloudevent(Resource):
                 actinia_resp["queue"],
                 url,
             )
-            return SimpleStatusCodeResponseModel(
-                status=204,
-                message=self.msg.replace("<EVENT1>", event_received["id"])
+            response = {
+                "status": 201,
+                "message": self.msg.replace("<EVENT1>", event_received["id"])
                 .replace("<EVENT2>", new_event["id"])
                 .replace("<ACTINIA_JOB>", queue_name),
-            )
+                "actinia_queue_name": queue_name,
+                "actinia_job": resource_id,
+            }
+            return make_response(jsonify(response), 201)
+
         except ConnectionError as e:
             return f"Connection ERROR when returning cloudevent: {e}"

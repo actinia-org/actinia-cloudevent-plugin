@@ -7,6 +7,7 @@
 exclude = .git,.pycache,build,.eggs
 
 per-file-ignores =
+    ./tests/actinia_worker_http_launcher.py: E501
     ./tests/cloudevent_receiver_server.py: E501
     # remove when implemented:
     ./src/actinia_cloudevent_plugin/api/cloudevent.py: E501

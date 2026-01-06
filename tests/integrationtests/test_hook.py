@@ -77,7 +77,7 @@ class CloudeventTest(TestCase):
             resp,
             Response,
         ), "The response is not of type Response"
-        assert resp.status_code == 200, "The status code is not 200"
+        assert resp.status_code == 201, "The status code is not 201"
         assert hasattr(resp, "json"), "The response has no attribute 'json'"
         assert (
             "message" in resp.json
