@@ -13,6 +13,7 @@
 # PLR2004 magic-value-comparison (unnamed numerical constants ("magic") values)
 # PLR6301 Method could be a function, class method, or static method
 # PLW0603 (checks for use of) global-statement
+# RUF067 `__init__` module should only contain docstrings and re-exports
 # S104 Possible binding to all interfaces
 # S107 hardcoded-password-default
 # S113 Probable use of `requests` call without timeout
@@ -25,6 +26,7 @@ lint.ignore = ["ANN001", "ANN201", "ANN202", "E501", "FA102", "N802", "N816", "P
 "tests/testsuite.py" = [ "PLC0415",]
 "src/actinia_cloudevent_plugin/resources/logging.py" = ["A005",]
 "src/actinia_cloudevent_plugin/resources/config.py" = ["PLR0912", "SIM102","S105"]
+"src/actinia_cloudevent_plugin/__init__.py" = ["RUF067",]
 "tests/integrationtests/test_cloudevent.py" = ["PLR2004",]
 "tests/cloudevent_receiver_server.py" = ["S104"]
 "tests/integrationtests/test_hook.py" = ["PLR2004",]
