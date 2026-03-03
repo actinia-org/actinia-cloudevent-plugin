@@ -16,8 +16,7 @@ docker compose -f docker/docker-compose.yml up -d
 [actinia-docker repository](https://github.com/actinia-org/actinia-docker#local-dev-setup-for-actinia-core-plugins-with-vscode)
 2. Have this repository open locally with vscode and press `F5`.
 After a few seconds, a browser window should be openend, pointing to
-an endpoint (showing 405 Method Not Allowed as this plugin has only
-HTTP POST endpoints so far).
+the version endpoint.
 
 Alternatively, configure actinia-core to run jobs via actinia-worker.
 In the actinia-core dev-setup, use the `per_job` queue in
