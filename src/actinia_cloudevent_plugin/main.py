@@ -50,6 +50,6 @@ if __name__ == "__main__":
     # call this for development only with:
     # `python3 -m actinia_cloudevent_plugin.main`
     log.debug("starting app in development mode...")
-    # ruff: S201 :Use of `debug=True` in Flask app detected
+    # ignore ruff: S201 :Use of `debug=True` in Flask app detected
     flask_app.run(debug=True, use_reloader=False)  # noqa: S201
     # for production environent use application in wsgi.py
