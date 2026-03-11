@@ -71,7 +71,9 @@ class Cloudevent(Resource):
                 # job is processed directly.
                 log.info("No need to start actinia-worker")
             else:
-                url = f"{ACTINIA.worker_http_launcher_url}/{queue_name}"
+                url = ACTINIA.worker_http_launcher_url
+                if "{{ queue_name }}" in url:
+                    url.replace("{{ queue_name }}", queue_name)
                 new_event = send_binary_cloud_event(
                     event_received,
                     queue_name,
