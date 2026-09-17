@@ -1,8 +1,9 @@
+---
 name: CodeQL Code Scan
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   schedule:
     # Check every Monday at 04:36
     - cron: "36 04 * * 1"

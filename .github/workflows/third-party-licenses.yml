@@ -1,10 +1,11 @@
+---
 name: Generate Third-Party Licenses
 
 on:
   release:
     types: [published]
 
-permissions: {}
+permissions: { }
 
 jobs:
   generate-third-party-licenses:
