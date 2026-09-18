@@ -1,4 +1,4 @@
-FROM alpine:3.23
+FROM alpine:3.24
 
 # python3 + pip3
 # hadolint ignore=DL3018
@@ -9,7 +9,7 @@ RUN /usr/bin/python -m venv --system-site-packages --without-pip /opt/venv
 # hadolint ignore=DL3013
 RUN python -m ensurepip && pip3 install --no-cache-dir --upgrade pip pep517 wheel
 
-RUN pip install --no-cache-dir cloudevents flask
+RUN pip3 install --no-cache-dir "cloudevents>=1.2,<2" flask
 
 COPY tests/cloudevent_receiver_server.py /src/cloudevent_receiver_server.py
 
