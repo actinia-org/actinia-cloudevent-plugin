@@ -33,7 +33,7 @@ dependencies = [
     "colorlog>=3.1.4",
     "python-json-logger",
     "requests>=2.20.0",
-    "cloudevents>=1.2,<2",
+    "cloudevents>=2.2,<3",
 ]
 
 [project.optional-dependencies]
