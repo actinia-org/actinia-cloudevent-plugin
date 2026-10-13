@@ -14,8 +14,8 @@ __maintainer__ = "mundialis GmbH & Co. KG"
 import json
 
 import requests
-from cloudevents.conversion import to_binary
-from cloudevents.http import CloudEvent
+from cloudevents.core.bindings.http import to_binary_event
+from cloudevents.core.v1.event import CloudEvent
 from flask import jsonify, make_response, request
 from flask_restful_swagger_2 import Resource, swagger
 
@@ -104,8 +104,8 @@ class Hooks(Resource):
             }
             data = {"actinia_job": resp}
             event = CloudEvent(attributes, data)
-            headers, body = to_binary(event)
-            requests.post(url, headers=headers, data=body)
+            message = to_binary_event(event)
+            requests.post(url, headers=message.headers, data=message.body)
         except ConnectionError as e:
             return f"Connection ERROR when returning cloudevent: {e}"
         except Exception() as e:

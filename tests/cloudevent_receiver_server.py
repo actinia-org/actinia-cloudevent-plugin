@@ -9,8 +9,8 @@ code used from sdk-python
 -> https://github.com/cloudevents/sdk-python/blob/main/samples/http-json-cloudevents/json_sample_server.py
 """
 
-from cloudevents.exceptions import MissingRequiredFields
-from cloudevents.http import from_http
+from cloudevents.core.bindings.http import HTTPMessage, from_http_event
+from cloudevents.core.exceptions import MissingRequiredAttributeError
 from flask import Flask, request
 
 app = Flask(__name__)
@@ -21,14 +21,15 @@ def home():
     """Server for cloudevent receival."""
     # create a CloudEvent
     try:
-        event = from_http(request.headers, request.get_data())
-    except MissingRequiredFields as e:
+        message = HTTPMessage(headers=request.headers, body=request.get_data())
+        event = from_http_event(message)
+    except MissingRequiredAttributeError as e:
         return f"ERROR parsing cloudevent: {e}", 400
 
     # you can access cloudevent fields as seen below
     print(
-        f"Found {event['id']} from {event['source']} with type "
-        f"{event['type']} and specversion {event['specversion']}",
+        f"Found {event.get_id()} from {event.get_source()} with type "
+        f"{event.get_type()} and specversion {event.get_specversion()}",
     )
 
     return "", 204

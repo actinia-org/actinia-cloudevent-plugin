@@ -15,8 +15,13 @@ __maintainer__ = "mundialis GmbH & Co. KG"
 import json
 
 import requests
-from cloudevents.conversion import to_binary, to_structured
-from cloudevents.http import CloudEvent, from_http
+from cloudevents.core.bindings.http import (
+    HTTPMessage,
+    from_http_event,
+    to_binary_event,
+    to_structured_event,
+)
+from cloudevents.core.v1.event import CloudEvent
 from flask import request
 from requests.auth import HTTPBasicAuth
 
@@ -26,11 +31,12 @@ from actinia_cloudevent_plugin.resources.config import ACTINIA, EVENTRECEIVER
 def receive_cloud_event():
     """Return cloudevent from postpody."""
     # Parses CloudEvent 'data' and 'headers' into a CloudEvent.
-    event = from_http(request.headers, request.get_data())
+    message = HTTPMessage(headers=request.headers, body=request.get_data())
+    event = from_http_event(message)
 
     # ? TODO
     # eventually Filter the event (see example below)
-    event_type = event["type"]
+    event_type = event.get_type()
     if event_type == "com.example.object.created":
         print("Object created event received!")
 
@@ -91,9 +97,9 @@ def send_binary_cloud_event(event, queue_name, url):
     """Return posted binary event with actinia_job."""
     return send_cloud_event(
         mode="binary",
-        version=event["specversion"],
+        version=event.get_specversion(),
         cetype="com.mundialis.actinia.process.startworker",
-        subject=event["subject"],
+        subject=event.get_subject(),
         actiniaqueuename=queue_name,
         url=url,
     )
@@ -104,9 +110,9 @@ def send_structured_cloud_event(event, actinia_job, url):
     # TODO: adjust to queue name
     return send_cloud_event(
         mode="structured",
-        version=event["specversion"],
+        version=event.get_specversion(),
         cetype="com.mundialis.actinia.process.started",
-        subject=event["subject"],
+        subject=event.get_subject(),
         data={"actinia_job": actinia_job},
         url=url,
     )
@@ -149,10 +155,10 @@ def send_cloud_event(
     # In other words, a binary formatted CloudEvent would work for both
     # a CloudEvents enabled receiver as well as one that is unaware of CloudEvents.
     if mode == "binary":
-        headers, body = to_binary(event)
+        message = to_binary_event(event)
     else:
-        headers, body = to_structured(event)
+        message = to_structured_event(event)
 
-    requests.post(url, headers=headers, data=body)
+    requests.post(url, headers=message.headers, data=message.body)
 
     return event
